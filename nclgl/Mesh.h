@@ -22,6 +22,7 @@ public:
 
 	virtual void Draw(); //Virtual so it can be implemented or overloaded
 	static Mesh* GenerateTriangle();  //Static so that it can be independant of any object. Returns a pointer to a mesh;
+	static Mesh* GenerateQuad();
 
 	void SetTexture(GLuint tex) { texture = tex; }
 	GLuint GetTexture() { return texture; }

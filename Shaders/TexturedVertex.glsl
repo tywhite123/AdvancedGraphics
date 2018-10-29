@@ -1,9 +1,9 @@
 #version 150
 
 uniform mat4 modelMatrix = mat4(1);
-uniform mat4 viewMatrix= mat4(1);
-uniform mat4 projMatrix= mat4(1);
-uniform mat4 textureMatrix= mat4(1);
+uniform mat4 viewMatrix = mat4(1);
+uniform mat4 projMatrix;
+uniform mat4 textureMatrix;
 
 in vec3 position;
 in vec2 texCoord;
