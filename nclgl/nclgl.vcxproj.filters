@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="GameTimer.cpp" />
+    <ClCompile Include="MD5Anim.cpp" />
+    <ClCompile Include="MD5FileData.cpp" />
+    <ClCompile Include="MD5Mesh.cpp" />
+    <ClCompile Include="MD5Node.cpp" />
+    <ClCompile Include="OBJMesh.cpp" />
+    <ClCompile Include="Window.cpp" />
+    <ClCompile Include="Shader.cpp">
+      <Filter>My Code</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>My Code</Filter>
+    </ClCompile>
+    <ClCompile Include="Mouse.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Keyboard.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion.cpp">
+      <Filter>Maths</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix4.cpp">
+      <Filter>Maths</Filter>
+    </ClCompile>
+    <ClCompile Include="OGLRenderer.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="ChildMeshInterface.h" />
+    <ClInclude Include="common.h" />
+    <ClInclude Include="GameTimer.h" />
+    <ClInclude Include="MD5Anim.h" />
+    <ClInclude Include="MD5FileData.h" />
+    <ClInclude Include="MD5Mesh.h" />
+    <ClInclude Include="MD5Node.h" />
+    <ClInclude Include="OBJMesh.h" />
+    <ClInclude Include="Window.h" />
+    <ClInclude Include="Shader.h">
+      <Filter>My Code</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>My Code</Filter>
+    </ClInclude>
+    <ClInclude Include="Mouse.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Keyboard.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="InputDevice.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector4.h">
+      <Filter>Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector3.h">
+      <Filter>Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="Quaternion.h">
+      <Filter>Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix4.h">
+      <Filter>Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="OGLRenderer.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="My Code">
+      <UniqueIdentifier>{d680df6e-9951-401b-a0e9-ac0d519c9059}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{e01803f7-e610-459a-9698-b2f88c239792}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Maths">
+      <UniqueIdentifier>{56596814-0384-4490-8ad0-50e8c122488d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering">
+      <UniqueIdentifier>{5b4c13b7-ae89-4e46-98ff-33fb6e2cf3e6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
