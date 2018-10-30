@@ -30,6 +30,9 @@
     <ClCompile Include="OGLRenderer.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="SceneNode.cpp" />
+    <ClCompile Include="Plane.cpp" />
+    <ClCompile Include="Frustum.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -75,6 +78,9 @@
     <ClInclude Include="OGLRenderer.h">
       <Filter>Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="SceneNode.h" />
+    <ClInclude Include="Plane.h" />
+    <ClInclude Include="Frustum.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="My Code">

@@ -19,8 +19,8 @@ _-_-_-_-_-_-_-""  ""
 #include <fstream>
 #include <vector>
 
-#include "GL/glew.h"
-#include "GL/wglew.h"
+#include <GL\glew.h>
+#include <GL\wglew.h>
 
 #include "SOIL.h"
 
@@ -38,10 +38,10 @@ _-_-_-_-_-_-_-""  ""
 using std::vector;
 
 #pragma comment(lib, "opengl32.lib")
-#pragma comment(lib, "glew32.lib")
+#pragma comment(lib, "glew32s.lib")
 #pragma comment(lib, "SOIL.lib")
 
-#define OPENGL_DEBUGGING
+//#define OPENGL_DEBUGGING
 
 static const float biasValues[16] = {
 	0.5, 0.0, 0.0, 0.0,
