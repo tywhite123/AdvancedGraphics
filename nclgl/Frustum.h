@@ -16,6 +16,6 @@ public:
 	bool InsideFrustum(SceneNode &n);
 
 protected:
-	Plane planes[4];
+	Plane planes[6];
 };
 

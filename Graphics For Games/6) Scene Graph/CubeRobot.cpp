@@ -11,6 +11,7 @@ CubeRobot::CubeRobot()
 		return;
 	}
 
+
 	SceneNode* body = new SceneNode(cube, s, Vector4(1, 0, 0, 1)); //RED
 	body->SetScale(Vector3(10, 15, 5));
 	body->SetModelMatrix(Matrix4::Translation(Vector3(0, 35, 0)));
@@ -36,18 +37,18 @@ CubeRobot::CubeRobot()
 	body->AddChild(rightArm);
 
 	SceneNode* leftLeg = new SceneNode(cube, s, Vector4(0, 0, 1, 1));
-	leftLeg->SetScale(Vector3(3, -8.5f, 3));
+	leftLeg->SetScale(Vector3(3, -17.5f, 3));
 	leftLeg->SetModelMatrix(Matrix4::Translation(Vector3(-8, 0, 0)));
-	leftLeg->SetBoundingRadius(8.0f);
+	leftLeg->SetBoundingRadius(18.0f);
 	body->AddChild(leftLeg);
 
 	SceneNode* rightLeg = new SceneNode(cube, s, Vector4(0, 0, 1, 1));
-	rightLeg->SetScale(Vector3(3, -8.5f, 3));
+	rightLeg->SetScale(Vector3(3, -17.5f, 3));
 	rightLeg->SetModelMatrix(Matrix4::Translation(Vector3(8, 0, 0)));
-	rightLeg->SetBoundingRadius(8.0f);
+	rightLeg->SetBoundingRadius(18.0f);
 	body->AddChild(rightLeg);
 
-	leftFoot = new SceneNode(cube, s, Vector4(0, 1, 1, 1));
+	/*leftFoot = new SceneNode(cube, s, Vector4(0, 1, 1, 1));
 	leftFoot->SetScale(Vector3(3, -8.5f, 3));
 	leftFoot->SetModelMatrix(Matrix4::Translation(Vector3(0, -16.5, 0)));
 	leftFoot->SetBoundingRadius(8.0f);
@@ -57,7 +58,7 @@ CubeRobot::CubeRobot()
 	rightFoot->SetScale(Vector3(3, -8.5f, 3));
 	rightFoot->SetModelMatrix(Matrix4::Translation(Vector3(0, -16.5, 0)));
 	rightFoot->SetBoundingRadius(8.0f);
-	rightLeg->AddChild(rightFoot);
+	rightLeg->AddChild(rightFoot);*/
 }
 
 
@@ -77,9 +78,9 @@ void CubeRobot::Update(float msec)
 	rightArm->SetModelMatrix(rightArm->GetModelMatrix() * Matrix4::Rotation(msec / 10.0f, Vector3(1, 0, 0)));
 	
 
-	leftFoot->SetModelMatrix(leftFoot->GetModelMatrix() * Matrix4::Rotation(-msec / 10.0f, Vector3(1, 0, 0)));
+	/*leftFoot->SetModelMatrix(leftFoot->GetModelMatrix() * Matrix4::Rotation(-msec / 10.0f, Vector3(1, 0, 0)));
 
-	rightFoot->SetModelMatrix(rightFoot->GetModelMatrix() * Matrix4::Rotation(msec / 10.0f, Vector3(1, 0, 0)));
+	rightFoot->SetModelMatrix(rightFoot->GetModelMatrix() * Matrix4::Rotation(msec / 10.0f, Vector3(1, 0, 0)));*/
 
 	SceneNode::Update(msec);
 

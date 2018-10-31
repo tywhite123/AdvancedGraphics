@@ -26,12 +26,12 @@ protected:
 	SceneNode* root;
 	Camera* camera;
 	Mesh* quad;
-
-	Shader* shader;
+	
+	Frustum frameFrustum;
 
 	vector<SceneNode*> transparentNodeList;
 	vector<SceneNode*> nodeList;
 	
-	Frustum frameFrustum;
+	
 };
 

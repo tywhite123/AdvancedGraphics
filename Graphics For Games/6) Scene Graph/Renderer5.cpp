@@ -5,21 +5,24 @@
 Renderer6::Renderer6(Window & parent) : OGLRenderer(parent)
 {
 	CubeRobot::CreateCube();
+	
+	projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 45.0f);
+	
 	camera = new Camera();
 
-	projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 45.0f);
+	
 
 	camera->SetPosition(Vector3(0, 30, 175));
 	
 	
-	shader = new Shader(SHADERDIR"SceneVertex.glsl", SHADERDIR"SceneFragment.glsl");
+	currentShader = new Shader(SHADERDIR"SceneVertex.glsl", SHADERDIR"SceneFragment.glsl");
 
-	if (!shader->LinkProgram()) {
+	if (!currentShader->LinkProgram()) {
 		return;
 	}
 
 	quad = Mesh::GenerateQuad();
-	quad->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"stainedglass.tga", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, 0));
+	quad->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"stainedglass.tga", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
 
 	if (!quad->GetTexture())
 		return;
@@ -29,14 +32,14 @@ Renderer6::Renderer6(Window & parent) : OGLRenderer(parent)
 	
 
 	for (int i = 0; i < 5; ++i) {
-		SceneNode* s = new SceneNode(quad, shader, Vector4(1.0f, 1.0f, 1.0f, 0.5f));
+		SceneNode* s = new SceneNode(quad, currentShader, Vector4(1.0f, 1.0f, 1.0f, 0.5f));
 		s->SetModelMatrix(Matrix4::Translation(Vector3(0.0f, 100.0f, -300.0f + 100.0f + 100 * i)));
 		s->SetScale(Vector3(100.0f, 100.0f, 100.0f));
 		s->SetBoundingRadius(100.0f);
 		root->AddChild(s);
 	}
-
 	root->AddChild(new CubeRobot());
+
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
@@ -59,6 +62,7 @@ void Renderer6::UpdateScene(float msec)
 	camera->UpdateCamera(msec);
 	viewMatrix = camera->BuildViewMatrix();
 	frameFrustum.FromMatrix(projMatrix*viewMatrix);
+
 	root->Update(msec);
 }
 
@@ -118,7 +122,7 @@ void Renderer6::DrawNodes()
 	for (vector<SceneNode*>::const_iterator i = nodeList.begin(); i != nodeList.end(); ++i)
 		DrawNode((*i));
 
-	for (vector<SceneNode*>::const_iterator i = transparentNodeList.begin(); i != transparentNodeList.end(); ++i)
+	for (vector<SceneNode*>::const_reverse_iterator i = transparentNodeList.rbegin(); i != transparentNodeList.rend(); ++i)
 		DrawNode((*i));
 
 }
@@ -134,7 +138,7 @@ void Renderer6::DrawNode(SceneNode * n)
 		glUseProgram(program);
 		UpdateShaderMatrices();
 
-		glUniform1i(glGetUniformLocation(program, "diffuseTex"), 1);
+		glUniform1i(glGetUniformLocation(program, "diffuseTex"), 0);
 
 		glUniformMatrix4fv(glGetUniformLocation(program, "modelMatrix"), 1, false, (float*)&transform);
 
@@ -147,7 +151,8 @@ void Renderer6::DrawNode(SceneNode * n)
 		glUseProgram(0);
 	}
 
-	/*for (vector<SceneNode*>::const_iterator i = n->GetChildIteratorStart(); i != n->GetChildIteratorEnd(); ++i)
+/*
+	for (vector<SceneNode*>::const_iterator i = n->GetChildIteratorStart(); i != n->GetChildIteratorEnd(); ++i)
 		DrawNode(*i);*/
 
 }

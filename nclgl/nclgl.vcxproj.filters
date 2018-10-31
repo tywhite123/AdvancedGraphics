@@ -1,18 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="MD5Anim.cpp" />
     <ClCompile Include="MD5FileData.cpp" />
-    <ClCompile Include="MD5Mesh.cpp" />
     <ClCompile Include="MD5Node.cpp" />
-    <ClCompile Include="OBJMesh.cpp" />
-    <ClCompile Include="Window.cpp" />
     <ClCompile Include="Shader.cpp">
-      <Filter>My Code</Filter>
-    </ClCompile>
-    <ClCompile Include="Mesh.cpp">
       <Filter>My Code</Filter>
     </ClCompile>
     <ClCompile Include="Mouse.cpp">
@@ -30,25 +22,42 @@
     <ClCompile Include="OGLRenderer.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="SceneNode.cpp" />
-    <ClCompile Include="Plane.cpp" />
-    <ClCompile Include="Frustum.cpp" />
+    <ClCompile Include="Frustum.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneNode.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Plane.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>Maths</Filter>
+    </ClCompile>
+    <ClCompile Include="GameTimer.cpp">
+      <Filter>Maths</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="OBJMesh.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="MD5Mesh.cpp" />
+    <ClCompile Include="HeightMap.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h" />
     <ClInclude Include="ChildMeshInterface.h" />
     <ClInclude Include="common.h" />
-    <ClInclude Include="GameTimer.h" />
     <ClInclude Include="MD5Anim.h" />
     <ClInclude Include="MD5FileData.h" />
-    <ClInclude Include="MD5Mesh.h" />
     <ClInclude Include="MD5Node.h" />
-    <ClInclude Include="OBJMesh.h" />
-    <ClInclude Include="Window.h" />
     <ClInclude Include="Shader.h">
-      <Filter>My Code</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh.h">
       <Filter>My Code</Filter>
     </ClInclude>
     <ClInclude Include="Mouse.h">
@@ -78,9 +87,34 @@
     <ClInclude Include="OGLRenderer.h">
       <Filter>Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="SceneNode.h" />
-    <ClInclude Include="Plane.h" />
-    <ClInclude Include="Frustum.h" />
+    <ClInclude Include="Frustum.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneNode.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Plane.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTimer.h">
+      <Filter>Maths</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="OBJMesh.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="MD5Mesh.h" />
+    <ClInclude Include="HeightMap.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="My Code">
@@ -94,6 +128,9 @@
     </Filter>
     <Filter Include="Rendering">
       <UniqueIdentifier>{5b4c13b7-ae89-4e46-98ff-33fb6e2cf3e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mesh">
+      <UniqueIdentifier>{c823e28a-db45-4980-b685-64767dd55704}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

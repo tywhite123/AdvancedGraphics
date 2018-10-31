@@ -10,7 +10,7 @@ MAX BUFFER = 2;
 Max buffer is at the end to define the size of the array;
 */
 enum MeshBuffer {
-	VERTEX_BUFFER, COLOUR_BUFFER, TEXTURE_BUFFER, MAX_BUFFER
+	VERTEX_BUFFER, COLOUR_BUFFER, TEXTURE_BUFFER, INDEX_BUFFER, MAX_BUFFER
 };
 
 
@@ -33,9 +33,11 @@ protected:
 	GLuint arrayObject;
 	GLuint bufferObject[MAX_BUFFER]; //Set size to max buffer which is its value in enum
 	GLuint numVertices;
+	GLuint numIndices;
 	GLuint type;
 	GLuint texture;
-
+	
+	unsigned int* indices;
 	Vector3* vertices;
 	Vector4* colours;
 	Vector2* textureCoords;

@@ -15,4 +15,5 @@ void main(void){
     if(useTexture > 0){
         fragColour *= texture(diffuseTex, IN.texCoord);
     }
+
 }
