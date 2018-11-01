@@ -1,7 +1,7 @@
 #version 150
 
-uniform mat4 modelMatrix = mat4(1);
-uniform mat4 viewMatrix = mat4(1);
+uniform mat4 modelMatrix;
+uniform mat4 viewMatrix;
 uniform mat4 projMatrix;
 uniform mat4 textureMatrix;
 

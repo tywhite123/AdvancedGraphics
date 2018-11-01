@@ -128,7 +128,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Renderer9.cpp" />
     <ClCompile Include="Tutorial9.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Renderer9.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

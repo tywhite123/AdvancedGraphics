@@ -1,5 +1,5 @@
 #include "../../nclgl/window.h"
-#include "Renderer.h"
+#include "Renderer5.h"
 
 #pragma comment(lib, "nclgl.lib")
 
@@ -9,7 +9,7 @@ int main() {
 		return -1;
 	}
 
-	Renderer renderer(w);
+	Renderer6 renderer(w);
 	if(!renderer.HasInitialised()) {
 		return -1;
 	}

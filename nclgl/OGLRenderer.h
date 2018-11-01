@@ -41,6 +41,12 @@ using std::vector;
 #pragma comment(lib, "glew32s.lib")
 #pragma comment(lib, "SOIL.lib")
 
+#ifdef _DEBUG
+#define GL_BREAKPOINT glUniform4uiv(0,0,0);//Invalid, but triggers gdebugger ;)
+#else
+#define GL_BREAKPOINT //
+#endif
+
 //#define OPENGL_DEBUGGING
 
 static const float biasValues[16] = {

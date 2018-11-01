@@ -34,9 +34,6 @@
     <ClCompile Include="Plane.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="Window.cpp">
-      <Filter>Maths</Filter>
-    </ClCompile>
     <ClCompile Include="GameTimer.cpp">
       <Filter>Maths</Filter>
     </ClCompile>
@@ -49,6 +46,9 @@
     <ClCompile Include="MD5Mesh.cpp" />
     <ClCompile Include="HeightMap.cpp">
       <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>Rendering</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
