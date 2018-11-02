@@ -1,15 +1,15 @@
 #include "../../nclgl/window.h"
-#include "Renderer.h"
+#include "Renderer10.h"
 
 #pragma comment(lib, "nclgl.lib")
 
 int main() {	
-	Window w("Post Processing!", 800,600,false);
+	Window w("Post Processing!", 1920,1200,true);
 	if(!w.HasInitialised()) {
 		return -1;
 	}
 	
-	Renderer renderer(w);
+	Renderer10 renderer(w);
 	if(!renderer.HasInitialised()) {
 		return -1;
 	}

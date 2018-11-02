@@ -38,6 +38,13 @@ bool Shader::LinkProgram()
 	GLint code;
 	glGetProgramiv(program, GL_LINK_STATUS, &code);
 
+	GLchar error[8192] = {};
+	
+	if (code != GL_TRUE) {
+		glGetShaderInfoLog(program, 8192, NULL, error);
+		cout << "Error linking: " << error << endl;
+	}
+
 
 	return code == GL_TRUE ? true : false;
 }
