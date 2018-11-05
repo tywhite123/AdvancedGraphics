@@ -128,7 +128,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Renderer13.cpp" />
     <ClCompile Include="Tutorial13.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Renderer13.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

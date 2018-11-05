@@ -50,6 +50,7 @@
     <ClCompile Include="Window.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="Light.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChildMeshInterface.h" />
@@ -115,6 +116,7 @@
     <ClInclude Include="HeightMap.h">
       <Filter>Mesh</Filter>
     </ClInclude>
+    <ClInclude Include="Light.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="My Code">

@@ -1,7 +1,7 @@
 #pragma comment(lib, "nclgl.lib")
 
 #include "../../NCLGL/window.h"
-#include "Renderer.h"
+#include "Renderer12.h"
 
 int main() {
 	Window w("Per Pixel Lighting!", 800,600,false);
@@ -9,7 +9,7 @@ int main() {
 		return -1;
 	}
 	
-	Renderer renderer(w);//This handles all the boring OGL 3.2 initialisation stuff, and sets up our tutorial!
+	Renderer12 renderer(w);//This handles all the boring OGL 3.2 initialisation stuff, and sets up our tutorial!
 	if(!renderer.HasInitialised()) {
 		return -1;
 	}
