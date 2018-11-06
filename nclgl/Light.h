@@ -10,8 +10,11 @@ public:
 		this->colour = colour;
 		this->radius = radius;
 	}
+	Light() {};
 
 	~Light();
+
+	void UpdateLight(float msec);
 
 	Vector3 GetPosition() const { return position; }
 	void SetPosition(Vector3 val) { position = val; }

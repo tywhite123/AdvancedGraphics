@@ -130,7 +130,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Renderer15.cpp" />
     <ClCompile Include="Tutorial15.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Renderer15.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
