@@ -20,7 +20,7 @@ Renderer11::Renderer11(Window & parent) : OGLRenderer(parent)
 
 	SetTextureRepeating(heightMap->GetTexture(), true);
 
-	light = new Light(Vector3((RAW_WIDTH*HEIGHTMAP_X / 2.0f), 500.0f, (RAW_HEIGHT*HEIGHTMAP_Z) / 2.0f), Vector4(0, 1, 1, 1), (RAW_WIDTH*HEIGHTMAP_X) / 2.0f);
+	light = new Light(Vector3((RAW_WIDTH*HEIGHTMAP_X / 2.0f), 500.0f, (RAW_HEIGHT*HEIGHTMAP_Z) / 2.0f), Vector4(1, 1, 1, 1), (RAW_WIDTH*HEIGHTMAP_X) / 2.0f);
 
 	projMatrix = Matrix4::Perspective(1.0f, 15000.0f, (float)width / (float)height, 45.0f);
 

@@ -23,6 +23,7 @@ protected:
 	Shader* skyboxShader;
 
 	HeightMap* heightMap;
+	HeightMap* water;
 	Mesh* quad;
 
 	Light* light;

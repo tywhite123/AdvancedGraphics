@@ -193,7 +193,7 @@ void Renderer15::DrawPointLights()
 			Light &l = pointLights[(x*LIGHTNUM) + z];
 			float radius = l.GetRadius();
 
-			modelMatrix = pushMatrix * Matrix4::Rotation(rotation, Vector3(0, 1, 0)) *
+			modelMatrix = pushMatrix * Matrix4::Rotation(rotation, Vector3(1, 0, 0)) *
 				popMatrix * Matrix4::Translation(l.GetPosition()) * Matrix4::Scale(Vector3(radius, radius, radius));
 
 			l.SetPosition(modelMatrix.GetPositionVector());

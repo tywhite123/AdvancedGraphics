@@ -17,9 +17,14 @@ int main() {
 	w.LockMouseToWindow(true);
 	w.ShowOSPointer(false);
 
+	float msec = 0.0f;
+
 	while(w.UpdateWindow() && !Window::GetKeyboard()->KeyDown(KEYBOARD_ESCAPE)){
-		renderer.UpdateScene(w.GetTimer()->GetTimedMS());
-		renderer.RenderScene();
+		msec = w.GetTimer()->GetTimedMS();
+		renderer.UpdateScene(msec);
+		renderer.RenderScene();	
+	
+
 	}
 	return 0;
 }

@@ -4,7 +4,7 @@
 #pragma comment(lib, "nclgl.lib")
 
 int main() {	
-	Window w("Post Processing!", 1920,1200,true);
+	Window w("Post Processing!", 1920, 1200,true);
 	if(!w.HasInitialised()) {
 		return -1;
 	}

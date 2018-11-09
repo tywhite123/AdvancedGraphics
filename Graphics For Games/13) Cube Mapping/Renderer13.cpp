@@ -12,7 +12,7 @@ Renderer13::Renderer13(Window & parent) : OGLRenderer(parent)
 
 	camera->SetPosition(Vector3(RAW_WIDTH * HEIGHTMAP_X / 2.0f, 500.0f, RAW_HEIGHT*HEIGHTMAP_Z));
 	light = new Light(Vector3(RAW_WIDTH*HEIGHTMAP_X / 2.0f, 500.0f, RAW_HEIGHT*HEIGHTMAP_Z / 2.0f),
-		Vector4(1, 1, 1, 1), 10000.0f/*RAW_WIDTH*HEIGHTMAP_X / 2.0f*/);
+		Vector4(1, 1, 1, 1), RAW_WIDTH*HEIGHTMAP_X / 2.0f);
 
 	reflectShader = new Shader(SHADERDIR"PerPixelVertex.glsl", SHADERDIR"ReflectFragment.glsl");
 	skyboxShader = new Shader(SHADERDIR"SkyboxVertex.glsl", SHADERDIR"SkyboxFragment.glsl");

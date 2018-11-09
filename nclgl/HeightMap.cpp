@@ -2,7 +2,7 @@
 
 
 
-HeightMap::HeightMap(string name)
+HeightMap::HeightMap(string name, float heightY)
 {
 	ifstream file(name, ios::binary);
 	if (!file)
@@ -26,7 +26,8 @@ HeightMap::HeightMap(string name)
 			//Set the offset for the Y coords and which coord to apply data too
 			int offset = (x * RAW_WIDTH) + z;
 
-			vertices[offset] = Vector3(x*HEIGHTMAP_X, data[offset] * HEIGHTMAP_Y, z * HEIGHTMAP_Z);
+			//vertices[offset] = Vector3(x*HEIGHTMAP_X, data[offset] * HEIGHTMAP_Y, z * HEIGHTMAP_Z);
+			vertices[offset] = Vector3(x*HEIGHTMAP_X, data[offset] * heightY, z * HEIGHTMAP_Z);
 
 			textureCoords[offset] = Vector2(x * HEIGHTMAP_TEX_X, z * HEIGHTMAP_TEX_Z);
 
