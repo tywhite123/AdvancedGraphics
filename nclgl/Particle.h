@@ -7,7 +7,7 @@
 class Particle 
 {
 public:
-	Particle(Vector3 pos, Vector3 vel, Vector4 col, float life);
+	Particle(Vector3 pos, Vector3 vel, Vector4 col, float life, Mesh* m);
 	~Particle();
 
 
@@ -16,7 +16,7 @@ public:
 	void UpdatePosition(Vector3 pos) { position += pos; }
 
 	Vector3 GetVelocity() const { return velocity; }
-	void SetVelocity(Vector3 vel) { velocity = vel; }
+	void SetVelocity(Vector3 vel) { velocity = vel; velocity.Normalise(); }
 	void UpdateVelocity(Vector3 vel) { velocity += vel; }
 
 
@@ -30,7 +30,10 @@ public:
 
 	void SetDraw(bool d) { draw = d; }
 	bool GetDraw() const { return draw; }
-	void Draw() { quad->Draw(); }
+	void Draw();
+	void Update(float msec);
+	Matrix4 GetParticleMatrix() { return particleMatrix; }
+	
 
 
 
@@ -38,6 +41,7 @@ public:
 
 protected:
 	Mesh* quad;
+	Matrix4 particleMatrix;
 	Vector3 position;
 	Vector3 velocity;
 	Vector4 colour;

@@ -1,9 +1,11 @@
 #include "../../nclgl/window.h"
 #include "Renderer5.h"
+#include <time.h>
 
 #pragma comment(lib, "nclgl.lib")
 
 int main() {	
+	srand(time(NULL));
 	Window w("Index Buffers!",	1920,1080,false);
 	if(!w.HasInitialised()) {
 		return -1;

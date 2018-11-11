@@ -15,7 +15,7 @@ public:
 	~ParticleBehaviour();
 
 	void UpdateSystem(float msec);
-	void Draw();
+	void Draw(GLuint matrixLoc);
 
 	int UnusedParticles();
 	void EmitParticle();

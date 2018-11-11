@@ -14,9 +14,10 @@
 
 ParticleBehaviour::ParticleBehaviour(int noOfParticles, Vector3 center, Vector4 colour, Vector3 vel, float life)
 {
+	Mesh* m = Mesh::GenerateQuad();
 	particles.reserve(noOfParticles);
 	for (int i = 0; i < NO_OF_PARTICLES; ++i)
-		particles.push_back(new Particle(center, vel, colour, life));
+		particles.push_back(new Particle(center, vel, colour, life, m));
 	last = 0;
 	particleCount = 0;
 	systemCenter = center;
@@ -39,8 +40,10 @@ void ParticleBehaviour::UpdateSystem(float msec)
 	for (int i = 0; i < particles.size(); ++i) {
 		particles[i]->UpdateLife(msec);
 		if (particles[i]->GetLife() >= 0) {
-			if (particles[i]->GetDraw())
-				particles[i]->UpdatePosition(particles[i]->GetVelocity());
+			if (particles[i]->GetDraw()) {
+				particles[i]->UpdatePosition(particles[i]->GetVelocity()/4);
+				particles[i]->Update(msec);
+			}
 		}
 		else {
 			particles[i]->SetDraw(false);
@@ -77,11 +80,13 @@ void ParticleBehaviour::UpdateSystem(float msec)
 
 }
 
-void ParticleBehaviour::Draw()
+void ParticleBehaviour::Draw(GLuint matrixLoc)
 {
 	for (int i = 0; i < particles.size(); ++i) {
-		if(particles[i]->GetDraw())
+		if (particles[i]->GetDraw()) {
+			glUniformMatrix4fv(matrixLoc, 1, false, (float*)&particles[i]->GetParticleMatrix());
 			particles[i]->Draw();
+		}
 	}
 }
 
@@ -106,11 +111,11 @@ int ParticleBehaviour::UnusedParticles()
 
 void ParticleBehaviour::EmitParticle()
 {
-	float dirX = rand() % 5 * 2 - 1;
-	float dirZ = rand() % 5 * 2 - 1;
+	float dirX = rand() % 10 * 2 - 1;
+	float dirZ = rand() % 10 * 2 - 1;
 	int i = UnusedParticles();
-	particles[i]->SetVelocity(Vector3(dirX, 1, dirZ));
-	particles[i]->GetVelocity().Normalise();
+	particles[i]->SetVelocity(Vector3(dirX, -1, dirZ));
+	//particles[i]->GetVelocity().Normalise();
 	particles[i]->SetDraw(true);
 
 }

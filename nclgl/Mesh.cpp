@@ -116,6 +116,11 @@ Mesh * Mesh::GenerateQuad()
 	return m;
 }
 
+Mesh * Mesh::GeneratePoint()
+{
+	return nullptr;
+}
+
 void Mesh::GenerateNormals()
 {
 	if (!normals)

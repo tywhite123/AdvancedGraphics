@@ -11,7 +11,7 @@ Renderer6::Renderer6(Window & parent) : OGLRenderer(parent)
 	m->LoadOBJMesh(MESHDIR"spyro2\\spyro.obj");
 	spyro = m;
 	quad = Mesh::GenerateQuad();
-	particles = new ParticleBehaviour(500, Vector3(0, 0, 0), Vector4(1, 1, 1, 1), Vector3(0, 0, 0), 10000.0f);
+	particles = new ParticleBehaviour(500, Vector3(0, 0, 0), Vector4(1, 1, 1, 1), Vector3(0, 0, 0), 1000.0f);
 
 	projMatrix = Matrix4::Perspective(1.0f, 100000.0f, (float)width / (float)height, 45.0f);
 	
@@ -28,7 +28,7 @@ Renderer6::Renderer6(Window & parent) : OGLRenderer(parent)
 	spyroShader = new Shader(SHADERDIR"PerPixelVertex.glsl", SHADERDIR"PerPixelFragment.glsl");
 	fontShader = new Shader(SHADERDIR"FontVert.glsl", SHADERDIR"FontFrag.glsl");
 	skyboxShader = new Shader(SHADERDIR"SkyboxVertex.glsl", SHADERDIR"SkyboxFragment.glsl");
-	particleShader = new Shader(SHADERDIR"matrixVertex.glsl", SHADERDIR"colourFragment.glsl");
+	particleShader = new Shader(SHADERDIR"particleVertex.glsl", SHADERDIR"colourFragment.glsl");
 
 	if (!terrainShader->LinkProgram() || !waterShader->LinkProgram() || !spyroShader->LinkProgram() || !fontShader->LinkProgram() || 
 		!skyboxShader->LinkProgram() || !particleShader->LinkProgram()) {
@@ -71,8 +71,8 @@ Renderer6::Renderer6(Window & parent) : OGLRenderer(parent)
 	root->AddChild(spyroNode);
 
 
-	particles->SetModelMatrix(Matrix4::Translation(Vector3(10000, 3000, 15000)));
-	particles->SetScale(Vector3(1000, 1000, 1000));
+	particles->SetModelMatrix(Matrix4::Translation(Vector3(10000, 7000, 15000)));
+	particles->SetScale(Vector3(10, 10, 10));
 	particles->SetBoundingRadius(100000.0f);
 	particles->SetColour(Vector4(1, 1, 1, 1));
 
@@ -265,7 +265,11 @@ void Renderer6::DrawSkybox()
 
 void Renderer6::DrawParticleSystem()
 {
+	glDisable(GL_CULL_FACE);
 	Matrix4 transform = particles->GetWorldTransform() * Matrix4::Scale(particles->GetScale());
+
+
+	
 	currentShader = particleShader;
 	glUseProgram(currentShader->GetProgram());
 	GLuint program = currentShader->GetProgram();
@@ -275,9 +279,10 @@ void Renderer6::DrawParticleSystem()
 	glUniformMatrix4fv(glGetUniformLocation(program, "modelMatrix"), 1, false, (float*)&transform);
 	glUniform4fv(glGetUniformLocation(program, "nodeColour"), 1, (float*)&particles->GetColour());
 
-	particles->Draw();
+	particles->Draw(glGetUniformLocation(program, "particleMatrix"));
 
 	glUseProgram(0);
+	glEnable(GL_CULL_FACE);
 
 }
 
