@@ -34,6 +34,8 @@
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="OBJMesh.cpp" />
     <ClCompile Include="OGLRenderer.cpp" />
+    <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="ParticleBehaviour.cpp" />
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="SceneNode.cpp" />
@@ -60,6 +62,8 @@
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="OBJMesh.h" />
     <ClInclude Include="OGLRenderer.h" />
+    <ClInclude Include="Particle.h" />
+    <ClInclude Include="ParticleBehaviour.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Quaternion.h" />
     <ClInclude Include="SceneNode.h" />

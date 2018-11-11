@@ -4,7 +4,7 @@
 #pragma comment(lib, "nclgl.lib")
 
 int main() {	
-	Window w("Index Buffers!", 800,600,false);
+	Window w("Index Buffers!",	1920,1080,false);
 	if(!w.HasInitialised()) {
 		return -1;
 	}

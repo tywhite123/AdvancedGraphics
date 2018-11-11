@@ -43,7 +43,6 @@
     <ClCompile Include="HeightMap.cpp">
       <Filter>Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="TextMesh.cpp" />
     <ClCompile Include="Light.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
@@ -61,6 +60,15 @@
     </ClCompile>
     <ClCompile Include="Window.cpp">
       <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="TextMesh.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Particle.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleBehaviour.cpp">
+      <Filter>Mesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -119,7 +127,6 @@
     <ClInclude Include="HeightMap.h">
       <Filter>Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="TextMesh.h" />
     <ClInclude Include="Light.h">
       <Filter>Rendering</Filter>
     </ClInclude>
@@ -140,6 +147,15 @@
     </ClInclude>
     <ClInclude Include="Window.h">
       <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="TextMesh.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleBehaviour.h">
+      <Filter>Mesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

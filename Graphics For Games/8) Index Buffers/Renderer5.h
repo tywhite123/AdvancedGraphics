@@ -7,6 +7,7 @@
 #include"..\..\nclgl\Frustum.h"
 #include "..\..\nclgl\HeightMap.h"
 #include "..\..\nclgl\TextMesh.h"
+#include "..\..\nclgl\ParticleBehaviour.h"
 #include <algorithm>
 
 class Renderer6 : public OGLRenderer
@@ -27,8 +28,10 @@ protected:
 	void DrawNodes();
 	void DrawNode(SceneNode* n);
 	void DrawSkybox();
+	void DrawParticleSystem();
 
 	SceneNode* root;
+	ParticleBehaviour* particles;
 	Camera* camera;
 	HeightMap* heightMap;
 	HeightMap* water;
@@ -40,6 +43,7 @@ protected:
 	Shader* waterShader;
 	Shader* spyroShader;
 	Shader* skyboxShader;
+	Shader* particleShader;
 
 	Frustum frameFrustum;
 
