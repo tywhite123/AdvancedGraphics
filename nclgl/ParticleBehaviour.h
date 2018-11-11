@@ -17,6 +17,8 @@ public:
 	void UpdateSystem(float msec);
 	void Draw(GLuint matrixLoc);
 
+	Vector3 GetCenter() { return systemCenter; }
+
 	int UnusedParticles();
 	void EmitParticle();
 

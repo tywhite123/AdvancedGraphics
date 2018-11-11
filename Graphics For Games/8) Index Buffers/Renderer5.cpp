@@ -266,7 +266,7 @@ void Renderer6::DrawSkybox()
 void Renderer6::DrawParticleSystem()
 {
 	glDisable(GL_CULL_FACE);
-	Matrix4 transform = particles->GetWorldTransform() * Matrix4::Scale(particles->GetScale());
+	Matrix4 transform = particles->GetWorldTransform() * Matrix4::Translation(particles->GetCenter()) * Matrix4::Scale(particles->GetScale());
 
 
 	

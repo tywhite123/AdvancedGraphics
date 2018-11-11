@@ -114,7 +114,7 @@ void ParticleBehaviour::EmitParticle()
 	float dirX = rand() % 10 * 2 - 1;
 	float dirZ = rand() % 10 * 2 - 1;
 	int i = UnusedParticles();
-	particles[i]->SetVelocity(Vector3(dirX, -1, dirZ));
+	particles[i]->SetVelocity(Vector3(dirX, 1, dirZ));
 	//particles[i]->GetVelocity().Normalise();
 	particles[i]->SetDraw(true);
 
