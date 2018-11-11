@@ -33,6 +33,7 @@ ParticleBehaviour::~ParticleBehaviour()
 
 void ParticleBehaviour::UpdateSystem(float msec)
 {
+	
 	int newParticle = (msec*10000.0);
 	if (newParticle > PARTICLES_PER_FRAME_LIMIT)
 		newParticle = PARTICLES_PER_FRAME_LIMIT;
@@ -48,7 +49,7 @@ void ParticleBehaviour::UpdateSystem(float msec)
 			particles[i]->UpdateLife(msec);
 			if (particles[i]->GetLife() >= 0) {
 				if (particles[i]->GetDraw()) {
-					particles[i]->UpdatePosition(particles[i]->GetVelocity()/4);
+					particles[i]->UpdatePosition(particles[i]->GetVelocity()/50);
 					//particles[i]->UpdateVelocity(Vector3(0, grav, 0));
 					
 					particles[i]->Update(msec);
@@ -98,9 +99,6 @@ void ParticleBehaviour::Draw(GLuint matrixLoc)
 			glUniformMatrix4fv(matrixLoc, 1, false, (float*)&particles[i]->GetParticleMatrix());
 			particles[i]->Draw();
 		}
-		else {
-			cout << "not" << endl;
-		}
 	}
 }
 
@@ -125,10 +123,10 @@ int ParticleBehaviour::UnusedParticles()
 
 void ParticleBehaviour::EmitParticle()
 {
-	float dirX = rand() % 10000 - 5000;
-	float dirZ = rand() % 10000 - 5000;
+	float dirX = rand() % 10 - 5;
+	float dirZ = rand() % 10 - 5;
 	int i = UnusedParticles();
-	particles[i]->SetVelocity(Vector3(dirX/2, 5000, dirZ/2));
+	particles[i]->SetVelocity(Vector3(dirX, 50, dirZ));
 	//particles[i]->GetVelocity().Normalise();
 	particles[i]->SetDraw(true);
 

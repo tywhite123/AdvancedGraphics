@@ -7,7 +7,7 @@
 class Particle 
 {
 public:
-	Particle(Vector3 pos, Vector3 vel, Vector4 col, float life, Mesh* m);
+	Particle(Vector3 pos, Vector3 vel, Vector4 col, float life, Mesh*& m);
 	~Particle();
 
 

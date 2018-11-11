@@ -2,7 +2,7 @@
 
 
 
-Particle::Particle(Vector3 pos, Vector3 vel, Vector4 col, float life, Mesh* m) :
+Particle::Particle(Vector3 pos, Vector3 vel, Vector4 col, float life, Mesh*& m) :
 	position(pos), velocity(vel), colour(col), life(life)
 {
 	particleMatrix = Matrix4::Translation(pos);
