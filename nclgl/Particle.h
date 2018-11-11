@@ -12,11 +12,17 @@ public:
 
 
 	Vector3 GetPosition() const { return position; }
-	void SetPosition(Vector3 pos) { position = pos; }
+	void SetPosition(Vector3 pos) { 
+		position = pos; 
+		particleMatrix = Matrix4::Translation(Vector3(position));
+	}
 	void UpdatePosition(Vector3 pos) { position += pos; }
 
 	Vector3 GetVelocity() const { return velocity; }
-	void SetVelocity(Vector3 vel) { velocity = vel; velocity.Normalise(); }
+	void SetVelocity(Vector3 vel) { 
+		velocity = vel; 
+		velocity.Normalise(); 
+	}
 	void UpdateVelocity(Vector3 vel) { velocity += vel; }
 
 

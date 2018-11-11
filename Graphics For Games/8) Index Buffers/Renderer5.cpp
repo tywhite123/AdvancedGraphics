@@ -71,7 +71,7 @@ Renderer6::Renderer6(Window & parent) : OGLRenderer(parent)
 	root->AddChild(spyroNode);
 
 
-	particles->SetModelMatrix(Matrix4::Translation(Vector3(10000, 7000, 15000)));
+	particles->SetModelMatrix(Matrix4::Translation(Vector3(0, 0, 0)));
 	particles->SetScale(Vector3(10, 10, 10));
 	particles->SetBoundingRadius(100000.0f);
 	particles->SetColour(Vector4(1, 1, 1, 1));
@@ -151,8 +151,8 @@ void Renderer6::RenderScene()
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	
 	
-	//DrawSkybox();
-	//DrawNodes();
+	DrawSkybox();
+	DrawNodes();
 	DrawParticleSystem();
 	DrawText(fps, Vector3(0, 0, 0), 16.0f);
 	DrawText(rTime, Vector3(0, 20, 0), 16.0f);

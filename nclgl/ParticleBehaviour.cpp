@@ -16,7 +16,7 @@ ParticleBehaviour::ParticleBehaviour(int noOfParticles, Vector3 center, Vector4 
 {
 	Mesh* m = Mesh::GenerateQuad();
 	particles.reserve(noOfParticles);
-	for (int i = 0; i < NO_OF_PARTICLES; ++i)
+	for (int i = 0; i < noOfParticles; ++i)
 		particles.push_back(new Particle(center, vel, colour, life, m));
 	last = 0;
 	particleCount = 0;
@@ -38,17 +38,27 @@ void ParticleBehaviour::UpdateSystem(float msec)
 		newParticle = PARTICLES_PER_FRAME_LIMIT;
 
 	for (int i = 0; i < particles.size(); ++i) {
-		particles[i]->UpdateLife(msec);
-		if (particles[i]->GetLife() >= 0) {
-			if (particles[i]->GetDraw()) {
-				particles[i]->UpdatePosition(particles[i]->GetVelocity()/4);
-				particles[i]->Update(msec);
+		if (particles[i]->GetDraw()) {
+
+			/*float grav = (particles[i]->GetVelocity().y * msec * 0.5) + -1.0f;
+			if (grav < -4.8f)
+				grav = -4.8f;*/
+
+
+			particles[i]->UpdateLife(msec);
+			if (particles[i]->GetLife() >= 0) {
+				if (particles[i]->GetDraw()) {
+					particles[i]->UpdatePosition(particles[i]->GetVelocity()/4);
+					//particles[i]->UpdateVelocity(Vector3(0, grav, 0));
+					
+					particles[i]->Update(msec);
+				}
 			}
-		}
-		else {
-			particles[i]->SetDraw(false);
-			particles[i]->SetLife(life);
-			particles[i]->SetPosition(systemCenter);
+			else {
+				particles[i]->SetDraw(false);
+				particles[i]->SetLife(life);
+				particles[i]->SetPosition(systemCenter);
+			}
 		}
 
 	}
@@ -77,6 +87,7 @@ void ParticleBehaviour::UpdateSystem(float msec)
 	}
 
 	particleCount++;*/
+	//cout << systemCenter << endl;
 
 }
 
@@ -86,6 +97,9 @@ void ParticleBehaviour::Draw(GLuint matrixLoc)
 		if (particles[i]->GetDraw()) {
 			glUniformMatrix4fv(matrixLoc, 1, false, (float*)&particles[i]->GetParticleMatrix());
 			particles[i]->Draw();
+		}
+		else {
+			cout << "not" << endl;
 		}
 	}
 }
@@ -111,10 +125,10 @@ int ParticleBehaviour::UnusedParticles()
 
 void ParticleBehaviour::EmitParticle()
 {
-	float dirX = rand() % 10 * 2 - 1;
-	float dirZ = rand() % 10 * 2 - 1;
+	float dirX = rand() % 10000 - 5000;
+	float dirZ = rand() % 10000 - 5000;
 	int i = UnusedParticles();
-	particles[i]->SetVelocity(Vector3(dirX, 1, dirZ));
+	particles[i]->SetVelocity(Vector3(dirX/2, 5000, dirZ/2));
 	//particles[i]->GetVelocity().Normalise();
 	particles[i]->SetDraw(true);
 
