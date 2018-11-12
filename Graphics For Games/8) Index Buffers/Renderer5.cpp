@@ -11,7 +11,7 @@ Renderer6::Renderer6(Window & parent) : OGLRenderer(parent)
 	m->LoadOBJMesh(MESHDIR"spyro2\\spyro.obj");
 	spyro = m;
 	quad = Mesh::GenerateQuad();
-	particles = new ParticleBehaviour(10000, Vector3(0, 0, 0), Vector4(1, 1, 1, 1), Vector3(0, 0, 0), 5000.0f);
+	particles = new ParticleBehaviour(10000, Vector3(0, 0, 0), Vector4(1, 1, 1, 1), Vector3(0, 0, 0), 500.0f);
 
 	projMatrix = Matrix4::Perspective(1.0f, 100000.0f, (float)width / (float)height, 45.0f);
 	
