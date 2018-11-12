@@ -21,6 +21,7 @@ Mesh::Mesh()
 	normals = NULL;
 	tangents = NULL;
 	bumpTexture = 0;
+	particle = false;
 }
 
 
@@ -54,6 +55,7 @@ void Mesh::Draw()
 	glBindVertexArray(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
+
 
 Mesh * Mesh::GenerateTriangle()
 {

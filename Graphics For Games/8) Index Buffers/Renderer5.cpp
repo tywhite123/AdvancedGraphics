@@ -11,7 +11,7 @@ Renderer6::Renderer6(Window & parent) : OGLRenderer(parent)
 	m->LoadOBJMesh(MESHDIR"spyro2\\spyro.obj");
 	spyro = m;
 	quad = Mesh::GenerateQuad();
-	particles = new ParticleBehaviour(1000, Vector3(0, 0, 0), Vector4(1, 1, 1, 1), Vector3(0, 0, 0), 5000.0f);
+	particles = new ParticleBehaviour(10000, Vector3(0, 0, 0), Vector4(1, 1, 1, 1), Vector3(0, 0, 0), 5000.0f);
 
 	projMatrix = Matrix4::Perspective(1.0f, 100000.0f, (float)width / (float)height, 45.0f);
 	
@@ -72,7 +72,7 @@ Renderer6::Renderer6(Window & parent) : OGLRenderer(parent)
 
 
 	particles->SetModelMatrix(Matrix4::Translation(Vector3(0, 0, 0)));
-	particles->SetScale(Vector3(10, 10, 10));
+	particles->SetScale(Vector3(50, 50, 50));
 	particles->SetBoundingRadius(100000.0f);
 	particles->SetColour(Vector4(1, 1, 1, 1));
 
@@ -147,7 +147,7 @@ void Renderer6::RenderScene()
 	SortNodeLists();
 
 	//Set to a sky colour
-	//glClearColor(0.8f, 0.93f, 1.0f, 1.0f);
+	//glClearColor(0.8f, 0.93f, 1.0f, 0.3f);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	
 	
@@ -266,7 +266,7 @@ void Renderer6::DrawSkybox()
 void Renderer6::DrawParticleSystem()
 {
 	glDisable(GL_CULL_FACE);
-	Matrix4 transform = particles->GetWorldTransform() * Matrix4::Translation(particles->GetCenter()) * Matrix4::Scale(particles->GetScale());
+	Matrix4 transform = particles->GetModelMatrix() * Matrix4::Translation(Vector3(20000,10000,20000)) * Matrix4::Rotation(-90, Vector3(0,0,1)) * Matrix4::Scale(particles->GetScale());
 
 
 	

@@ -35,6 +35,7 @@ public:
 	void SetTexture(GLuint tex) { texture = tex; }
 	GLuint GetTexture() { return texture; }
 
+
 protected:
 	void BufferData();
 	void GenerateTangents();
@@ -56,6 +57,9 @@ protected:
 	Vector2* textureCoords;
 	Vector3* normals;
 	Vector3* tangents;
+
+	bool particle;
+	GLuint noOfParticles;
 
 
 
