@@ -10,11 +10,11 @@
 #include "..\..\nclgl\ParticleBehaviour.h"
 #include <algorithm>
 
-class Renderer6 : public OGLRenderer
+class Renderer : public OGLRenderer
 {
 public:
-	Renderer6(Window &parent);
-	virtual ~Renderer6();
+	Renderer(Window &parent);
+	virtual ~Renderer();
 
 	virtual void UpdateScene(float msec);
 	virtual void RenderScene();
@@ -66,6 +66,8 @@ protected:
 	Window* w;
 	string fps;
 	string rTime;
+
+	int scene;
 	
 };
 

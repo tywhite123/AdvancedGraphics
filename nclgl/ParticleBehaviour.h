@@ -4,7 +4,7 @@
 #include "Particle.h"
 #include "SceneNode.h"
 
-const int NO_OF_PARTICLES = 500;
+const int MAX_OF_PARTICLES = 10000;
 const int PARTICLES_PER_FRAME_LIMIT = 2.0f;//0.016f * 10000.0f;
 
 class ParticleBehaviour : public SceneNode
@@ -23,12 +23,13 @@ public:
 	void EmitParticle();
 
 protected:
+	void RebufferData();
+
 	Vector3 systemCenter;
 	int noOfParticles;
 	int last;
 	int particleCount;
 	float life;
-
 	
 
 	vector<Particle*> particles;

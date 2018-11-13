@@ -120,6 +120,19 @@ Mesh * Mesh::GenerateQuad()
 
 Mesh * Mesh::GeneratePoint()
 {
+	Mesh* m = new Mesh();
+	m->numVertices = 1;
+
+	m->vertices = new Vector3[m->numVertices];
+	m->colours = new Vector4[m->numVertices];
+
+	m->vertices[0] = Vector3(0.0f, 0.0f, 0.0f);
+	m->colours[0] = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+
+	m->BufferData();
+
+	return m;
+
 	return nullptr;
 }
 
@@ -222,6 +235,8 @@ void Mesh::BufferData()
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferObject[INDEX_BUFFER]);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndices * sizeof(GLuint), indices, GL_STATIC_DRAW);
 	}
+
+
 
 	glBindVertexArray(0);
 

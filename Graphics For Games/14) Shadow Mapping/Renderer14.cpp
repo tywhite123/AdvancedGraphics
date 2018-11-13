@@ -8,7 +8,7 @@ Renderer14::Renderer14(Window & parent) : OGLRenderer(parent)
 {
 	camera = new Camera(-8.0f, 40.0f, Vector3(-100.0f, 50.0f, 250.0f));
 
-	light = new Light(Vector3(-450.0f, 200.0f, 280.0f), Vector4(1, 1, 1, 1), 5500.0f);
+	light = new Light(Vector3(-450.0f, 1000.0f, 280.0f), Vector4(1, 1, 1, 1), 5500.0f);
 	
 	hellData = new MD5FileData(MESHDIR"hellknight.md5mesh");
 	hellNode = new MD5Node(*hellData);

@@ -1,8 +1,8 @@
-#include "Renderer5.h"
+#include "Renderer.h"
+#include "Scene1.h"
 
 
-
-Renderer6::Renderer6(Window & parent) : OGLRenderer(parent)
+Renderer::Renderer(Window & parent) : OGLRenderer(parent)
 {
 	w = &parent;
 	heightMap = new HeightMap(TEXTUREDIR"terrain.raw");
@@ -12,6 +12,8 @@ Renderer6::Renderer6(Window & parent) : OGLRenderer(parent)
 	spyro = m;
 	quad = Mesh::GenerateQuad();
 	particles = new ParticleBehaviour(1000, Vector3(0, 0, 0), Vector4(1, 1, 1, 1), Vector3(0, 0, 0), 500.0f);
+
+	Scene1* scene1 = new Scene1();
 
 	projMatrix = Matrix4::Perspective(1.0f, 100000.0f, (float)width / (float)height, 45.0f);
 	
@@ -50,7 +52,11 @@ Renderer6::Renderer6(Window & parent) : OGLRenderer(parent)
 	SetTextureRepeating(heightMap->GetBumpMap(), true);
 	SetTextureRepeating(water->GetTexture(), true);
 
-	light = new Light(Vector3((RAW_WIDTH*HEIGHTMAP_X / 2.0f)*10, 1000.0f*10, (RAW_HEIGHT*HEIGHTMAP_Z) / 2.0f*10), Vector4(1, 1, 1, 1), (RAW_WIDTH*HEIGHTMAP_X) / 2.0f * 15.0f);
+	//SetTextureRepeating(scene1->GetHeightMapTex(), true);
+	//SetTextureRepeating(scene1->GetHeightBumpMap(), true);
+	//SetTextureRepeating(scene1->GetWaterTex(), true);
+
+	light = new Light(Vector3((RAW_WIDTH*HEIGHTMAP_X / 2.0f)*10, 100.0f*10, (RAW_HEIGHT*HEIGHTMAP_Z) / 2.0f*10), Vector4(1, 1, 1, 0.7f), (RAW_WIDTH*HEIGHTMAP_X) / 2.0f * 15.0f);
 
 	SceneNode* terrainNode = new SceneNode(heightMap, terrainShader, heightMap->GetTexture());
 	terrainNode->SetScale(Vector3(10, 10, 10));
@@ -67,8 +73,12 @@ Renderer6::Renderer6(Window & parent) : OGLRenderer(parent)
 	SceneNode* spyroNode = new SceneNode(spyro, spyroShader, spyro->GetTexture());
 	spyroNode->SetScale(Vector3(1000, 1000, 1000));
 	spyroNode->SetModelMatrix(Matrix4::Translation(Vector3(10000, 3000, 15000)) * Matrix4::Rotation(90.0f, Vector3(0, 1, 0)));
-	spyroNode->SetBoundingRadius(100000.0f);
+	spyroNode->SetBoundingRadius(1000.0f);
 	root->AddChild(spyroNode);
+
+	//scene1->SetModelMatrix(Matrix4::Translation(Vector3(0, 0, 0)));
+	//scene1->SetScale(Vector3(1, 1, 1));
+	//root->AddChild(scene1);
 
 
 	particles->SetModelMatrix(Matrix4::Translation(Vector3(0, 0, 0)));
@@ -91,11 +101,13 @@ Renderer6::Renderer6(Window & parent) : OGLRenderer(parent)
 	timeSinceProfile = 0;
 	framerate = 0;
 	testEnd = 0;
+	scene = 0;
 }
 
-Renderer6::~Renderer6()
+Renderer::~Renderer()
 {
 	delete heightMap;
+	delete particles;
 	delete water;
 	delete spyro;
 	delete root;
@@ -113,14 +125,15 @@ Renderer6::~Renderer6()
 	
 }
 
-void Renderer6::UpdateScene(float msec)
+void Renderer::UpdateScene(float msec)
 {
 	camera->UpdateCamera(msec);
 	viewMatrix = camera->BuildViewMatrix();
 	frameFrustum.FromMatrix(projMatrix*viewMatrix);
 	light->UpdateLight(msec);
 	float test = w->GetTimer()->GetMS();
-	particles->UpdateSystem(msec);
+	if(scene == 0)
+		particles->UpdateSystem(msec);
 	testEnd = w->GetTimer()->GetMS() - test;
 	
 
@@ -142,12 +155,18 @@ void Renderer6::UpdateScene(float msec)
 	}
 
 	start = w->GetTimer()->GetMS();
+	if (w->GetKeyboard()->KeyDown(KEYBOARD_1))
+		scene = 0;
+	else if (w->GetKeyboard()->KeyDown(KEYBOARD_2))
+		scene = 1;
 
 }
 
-void Renderer6::RenderScene()
+void Renderer::RenderScene()
 {
-	BuildNodeLists(root);
+	if (scene == 0)
+		BuildNodeLists(root);
+	else {}
 	SortNodeLists();
 
 	//Set to a sky colour
@@ -157,9 +176,16 @@ void Renderer6::RenderScene()
 	
 	DrawSkybox();
 	DrawNodes();
+
 	float partStart = w->GetTimer()->GetMS();
-	DrawParticleSystem();
+	if (scene == 0) {
+		DrawParticleSystem();
+	}
 	float partEnd = (w->GetTimer()->GetMS() - start) + testEnd;
+	
+	
+
+
 	DrawText(fps, Vector3(0, 0, 0), 16.0f);
 	DrawText(rTime, Vector3(0, 20, 0), 16.0f);
 	DrawText("Particle System: " + to_string(partEnd), Vector3(0, 40, 0), 16.0f);
@@ -169,7 +195,7 @@ void Renderer6::RenderScene()
 	ClearNodeLists();
 }
 
-void Renderer6::BuildNodeLists(SceneNode * from)
+void Renderer::BuildNodeLists(SceneNode * from)
 {
 
 	//Build lists based on the transparency
@@ -190,7 +216,7 @@ void Renderer6::BuildNodeLists(SceneNode * from)
 		BuildNodeLists((*i));
 }
 
-void Renderer6::SortNodeLists()
+void Renderer::SortNodeLists()
 {
 	//Sort the lists based on distance from camera
 
@@ -198,13 +224,13 @@ void Renderer6::SortNodeLists()
 	std::sort(nodeList.begin(), nodeList.end(), SceneNode::CompareByCameraDistance);
 }
 
-void Renderer6::ClearNodeLists()
+void Renderer::ClearNodeLists()
 {
 	transparentNodeList.clear();
 	nodeList.clear();
 }
 
-void Renderer6::DrawNodes()
+void Renderer::DrawNodes()
 {
 	//Draw each node
 
@@ -216,7 +242,7 @@ void Renderer6::DrawNodes()
 
 }
 
-void Renderer6::DrawNode(SceneNode * n)
+void Renderer::DrawNode(SceneNode * n)
 {
 	if (n->GetMesh() && n->GetShader()) {
 		Matrix4 transform = n->GetWorldTransform() * Matrix4::Scale(n->GetScale());
@@ -252,7 +278,7 @@ void Renderer6::DrawNode(SceneNode * n)
 
 }
 
-void Renderer6::DrawSkybox()
+void Renderer::DrawSkybox()
 {
 	glDepthMask(GL_FALSE);
 	SetCurrentShader(skyboxShader);
@@ -270,7 +296,7 @@ void Renderer6::DrawSkybox()
 	glCullFace(GL_BACK);
 }
 
-void Renderer6::DrawParticleSystem()
+void Renderer::DrawParticleSystem()
 {
 	glDisable(GL_CULL_FACE);
 	Matrix4 transform = particles->GetModelMatrix() * Matrix4::Translation(Vector3(20000,25000,20000)) * Matrix4::Rotation(-90, Vector3(0,0,1)) * Matrix4::Scale(particles->GetScale());
@@ -295,7 +321,7 @@ void Renderer6::DrawParticleSystem()
 
 
 
-void Renderer6::DrawText(const std::string &text, const Vector3 &position, const float size, const bool perspective) {
+void Renderer::DrawText(const std::string &text, const Vector3 &position, const float size, const bool perspective) {
 	//Create a new temporary TextMesh, using our line of text and our font
 	TextMesh* mesh = new TextMesh(text, *basicFont);
 

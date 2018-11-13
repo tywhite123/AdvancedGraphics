@@ -49,7 +49,7 @@ void ParticleBehaviour::UpdateSystem(float msec)
 			particles[i]->UpdateLife(msec);
 			if (particles[i]->GetLife() >= 0) {
 				if (particles[i]->GetDraw()) {
-					particles[i]->UpdatePosition(particles[i]->GetVelocity()/50);
+					particles[i]->UpdatePosition(particles[i]->GetVelocity()/20);
 					//particles[i]->UpdateVelocity(Vector3(0, grav, 0));
 					
 					particles[i]->Update(msec);
@@ -61,13 +61,12 @@ void ParticleBehaviour::UpdateSystem(float msec)
 				particles[i]->SetPosition(systemCenter);
 			}
 		}
-
 	}
 	
 
-	for(int i = 0; i < newParticle; ++i) {
+	//for(int i = 0; i < newParticle; ++i) {
 		EmitParticle();
-	}
+	//}
 
 	
 
@@ -127,7 +126,7 @@ void ParticleBehaviour::EmitParticle()
 	float dirZ = rand() % 10 - 5;
 	float dirY = rand() % 10 - 5;
 	int i = UnusedParticles();
-	particles[i]->SetVelocity(Vector3(/*dirX*/dirX, dirY, dirZ));
+	particles[i]->SetVelocity(Vector3(/*dirX*/10, dirY, dirZ));
 	//particles[i]->GetVelocity().Normalise();
 	particles[i]->SetDraw(true);
 

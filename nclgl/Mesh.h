@@ -2,6 +2,7 @@
 
 #include "OGLRenderer.h"
 
+
 //For selecting which buffer
 /*
 VERTEX BUFFER = 0;
@@ -25,6 +26,7 @@ public:
 	static Mesh* GenerateTriangle();  //Static so that it can be independant of any object. Returns a pointer to a mesh;
 	static Mesh* GenerateQuad();
 	static Mesh* GeneratePoint();
+
 
 	void GenerateNormals();
 
@@ -59,7 +61,6 @@ protected:
 	Vector3* tangents;
 
 	bool particle;
-	GLuint noOfParticles;
 
 
 
