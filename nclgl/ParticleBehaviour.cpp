@@ -17,7 +17,7 @@ ParticleBehaviour::ParticleBehaviour(int noOfParticles, Vector3 center, Vector4 
 	Mesh* m = Mesh::GenerateQuad();
 	particles.reserve(noOfParticles);
 	for (int i = 0; i < noOfParticles; ++i)
-		particles.push_back(new Particle(center, vel, colour, life, m));
+		particles.push_back(new Particle(Vector3(rand()%10000, center.y, center.z), vel, colour, life, m));
 	last = 0;
 	particleCount = 0;
 	systemCenter = center;
@@ -41,16 +41,16 @@ void ParticleBehaviour::UpdateSystem(float msec)
 	for (int i = 0; i < particles.size(); ++i) {
 		if (particles[i]->GetDraw()) {
 
-			/*float grav = (particles[i]->GetVelocity().y * msec * 0.5) + -1.0f;
-			if (grav < -4.8f)
-				grav = -4.8f;*/
+			//float grav = (particles[i]->GetVelocity().y * msec * 0.5) + -1.0f;
+			//if (grav < -0.01f)
+			//	grav = -0.01f;
 
 
 			particles[i]->UpdateLife(msec);
 			if (particles[i]->GetLife() >= 0) {
 				if (particles[i]->GetDraw()) {
-					particles[i]->UpdatePosition(particles[i]->GetVelocity()/20);
-					//particles[i]->UpdateVelocity(Vector3(0, grav, 0));
+					particles[i]->UpdatePosition(particles[i]->GetVelocity());
+				/*	particles[i]->UpdateVelocity(Vector3(0, grav, 0));*/
 					
 					particles[i]->Update(msec);
 				}
@@ -58,7 +58,9 @@ void ParticleBehaviour::UpdateSystem(float msec)
 			else {
 				particles[i]->SetDraw(false);
 				particles[i]->SetLife(life);
-				particles[i]->SetPosition(systemCenter);
+				float x = (float)rand() / (float)RAND_MAX;
+				float z = (float)rand() / (float)RAND_MAX;
+				particles[i]->SetPosition(Vector3(systemCenter.y, rand() % 100 + x, rand() % 100 + z));
 			}
 		}
 	}
@@ -126,7 +128,7 @@ void ParticleBehaviour::EmitParticle()
 	float dirZ = rand() % 10 - 5;
 	float dirY = rand() % 10 - 5;
 	int i = UnusedParticles();
-	particles[i]->SetVelocity(Vector3(/*dirX*/10, dirY, dirZ));
+	particles[i]->SetVelocity(Vector3(/*dirX*/10, dirY*10, dirZ*10));
 	//particles[i]->GetVelocity().Normalise();
 	particles[i]->SetDraw(true);
 

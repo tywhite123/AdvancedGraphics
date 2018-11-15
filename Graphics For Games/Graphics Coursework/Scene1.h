@@ -13,6 +13,7 @@ public:
 	GLuint GetHeightMapTex() { return heightMap->GetTexture(); }
 	GLuint GetHeightBumpMap() { return heightMap->GetBumpMap(); }
 	GLuint GetWaterTex() { return water->GetTexture(); }
+	GLuint GetCubeMap() { return cubeMap; }
 
 
 protected:

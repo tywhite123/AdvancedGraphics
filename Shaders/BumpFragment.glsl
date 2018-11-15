@@ -6,6 +6,7 @@ uniform vec3 cameraPos;
 uniform vec4 lightColour;
 uniform vec3 lightPos;
 uniform float lightRadius;
+uniform int lightType;
 
 in Vertex{
     vec4 colour;
@@ -25,11 +26,23 @@ void main(void){
 
     vec3 normal = normalize(TBN * (texture(bumpTex, IN.texCoord).rgb * 2.0 - 1.0));
 
-    vec3 incident = normalize(lightPos-IN.worldPos);
+    vec3 incident;
+    float atten;
+    if(lightType == 0){
+        incident = normalize(-lightPos);
+        atten = 1.0;
+    }
+    else{
+        incident = normalize(lightPos-IN.worldPos);
+        float dist = length(lightPos - IN.worldPos);
+        atten = 1.0 - clamp(dist/lightRadius,0.0,1.0);
+    }
+
+    //vec3 incident = normalize(lightPos-IN.worldPos);
     float lambert = max(0.0, dot(incident, normal));
 
-    float dist = length(lightPos - IN.worldPos);
-    float atten = 1.0 - clamp(dist/lightRadius,0.0,1.0);
+    //float dist = length(lightPos - IN.worldPos);
+    //float atten = 1.0 - clamp(dist/lightRadius,0.0,1.0);
 
     vec3 viewDir = normalize(cameraPos - IN.worldPos);
     vec3 halfDir = normalize(incident + viewDir);

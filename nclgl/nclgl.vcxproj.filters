@@ -25,9 +25,6 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="SceneNode.cpp">
-      <Filter>Rendering</Filter>
-    </ClCompile>
     <ClCompile Include="Plane.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
@@ -42,9 +39,6 @@
     </ClCompile>
     <ClCompile Include="HeightMap.cpp">
       <Filter>Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Light.cpp">
-      <Filter>Rendering</Filter>
     </ClCompile>
     <ClCompile Include="MD5Node.cpp">
       <Filter>Mesh\MD5</Filter>
@@ -69,6 +63,12 @@
     </ClCompile>
     <ClCompile Include="ParticleBehaviour.cpp">
       <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneNode.cpp">
+      <Filter>SceneManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Lights</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -109,9 +109,6 @@
     <ClInclude Include="Camera.h">
       <Filter>Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="SceneNode.h">
-      <Filter>Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="Plane.h">
       <Filter>Rendering</Filter>
     </ClInclude>
@@ -126,9 +123,6 @@
     </ClInclude>
     <ClInclude Include="HeightMap.h">
       <Filter>Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>Rendering</Filter>
     </ClInclude>
     <ClInclude Include="MD5Node.h">
       <Filter>Mesh\MD5</Filter>
@@ -157,6 +151,12 @@
     <ClInclude Include="ParticleBehaviour.h">
       <Filter>Mesh</Filter>
     </ClInclude>
+    <ClInclude Include="SceneNode.h">
+      <Filter>SceneManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Lights</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Input">
@@ -176,6 +176,12 @@
     </Filter>
     <Filter Include="Shader">
       <UniqueIdentifier>{d680df6e-9951-401b-a0e9-ac0d519c9059}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SceneManagement">
+      <UniqueIdentifier>{06c1d5a5-d833-4b8a-bf5a-87084a941228}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lights">
+      <UniqueIdentifier>{6a5f1150-9cd4-4104-8809-b046f94e038c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

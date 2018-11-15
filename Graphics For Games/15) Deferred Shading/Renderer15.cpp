@@ -209,6 +209,7 @@ void Renderer15::DrawPointLights()
 			else
 				glCullFace(GL_BACK);
 
+
 			sphere->Draw();
 
 		}

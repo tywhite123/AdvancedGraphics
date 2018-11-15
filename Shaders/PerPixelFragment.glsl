@@ -5,6 +5,7 @@ uniform vec3 cameraPos;
 uniform vec4 lightColour;
 uniform vec3 lightPos;
 uniform float lightRadius;
+uniform int lightType;
 
 in Vertex{
     vec4 colour;
@@ -17,13 +18,29 @@ out vec4 fragColour;
 
 void main(void){
 
+    //vec3 lightDir = normalize(-lightPos);
+
     vec4 diffuse = texture(diffuseTex, IN.texCoord);
 
-    vec3 incident = normalize(lightPos-IN.worldPos);
+
+    vec3 incident;
+    float atten;
+    if(lightType == 0){ //If directional
+        incident = normalize(-lightPos);
+        atten = 1.0;
+    }
+    else{ //Else spot
+        incident = normalize(lightPos-IN.worldPos);
+        float dist = length(lightPos - IN.worldPos);
+        atten = 1.0 - clamp(dist/lightRadius,0.0,1.0);
+    }
+
+    //vec3 incident = normalize(lightPos-IN.worldPos);
     float lambert = max(0.0, dot(incident, IN.normal));
 
-    float dist = length(lightPos - IN.worldPos);
-    float atten = 1.0 - clamp(dist/lightRadius,0.0,1.0);
+   // float dist = length(lightPos - IN.worldPos);
+    //float atten = 1.0 - clamp(dist/lightRadius,0.0,1.0);
+    //float atten = 1; //For directional
 
     vec3 viewDir = normalize(cameraPos - IN.worldPos);
     vec3 halfDir = normalize(incident + viewDir);
@@ -38,6 +55,7 @@ void main(void){
     
    // fragColour = vec4(colour + halfDir * sFactor,1);
    // return;
+    //fragColour = vec4(colour*lambert, diffuse.a);    
     fragColour = vec4(colour*atten*lambert, diffuse.a);
     fragColour.rgb += (diffuse.rgb * lightColour.rgb) * 0.25;
 }

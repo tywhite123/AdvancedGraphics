@@ -21,18 +21,25 @@ void main(void){
     vec4 diffuse = texture(diffuseTex, IN.texCoord) * IN.colour;
 
     //vec3 incident = normalize(lightPos-IN.worldPos);
-    vec3 incident = normalize(IN.worldPos-cameraPos);
+    //vec3 incident = normalize(IN.worldPos-cameraPos);
+    vec3 incident = normalize(-lightPos);
     float lambert = max(0.0, dot(incident, IN.normal));
 
     float dist = length(lightPos - IN.worldPos);
-    float atten = 1.0 - clamp(dist/lightRadius,0.0,1.0);
+    //float atten = 1.0 - clamp(dist/lightRadius,0.0,1.0);
+    float atten = 0.7;
 
+    if(atten < 0.2){
+        atten = 0.2;
+    }
+
+    vec3 viewDir = normalize(IN.worldPos - cameraPos);
     //vec3 viewDir = normalize(cameraPos - IN.worldPos);
-    //vec3 halfDir = normalize(incident + viewDir);
+    vec3 halfDir = normalize(incident + viewDir);
 
     //float rFactor = max(0.0, dot(halfDir, IN.normal));
     //float sFactor = pow(rFactor, 50.0);
-    vec4 reflection = texture(cubeTex, reflect(incident, normalize(IN.normal)));
+    vec4 reflection = texture(cubeTex, reflect(viewDir, normalize(IN.normal)));
     //vec3 colour = (diffuse.rgb * lightColour.rgb);
 
     
@@ -48,4 +55,5 @@ void main(void){
    //fragColour = (reflection);
 
     fragColour = (lightColour*diffuse*atten)*(diffuse+(reflection*2));
+    //fragColour = (lightColour*diffuse)*(diffuse+(reflection*2));
 }

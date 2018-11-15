@@ -21,7 +21,7 @@ public:
 	Vector3 GetVelocity() const { return velocity; }
 	void SetVelocity(Vector3 vel) { 
 		velocity = vel; 
-		velocity.Normalise(); 
+		//velocity.Normalise(); 
 	}
 	void UpdateVelocity(Vector3 vel) { velocity += vel; }
 

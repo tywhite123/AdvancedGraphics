@@ -2,13 +2,18 @@
 
 #include "Vector4.h"
 
+enum LightType {
+	DIRECTIONAL, SPOT
+};
+
 class Light
 {
 public:
-	Light(Vector3 position, Vector4 colour, float radius) {
+	Light(Vector3 position, Vector4 colour, float radius, LightType type) {
 		this->position = position;
 		this->colour = colour;
 		this->radius = radius;
+		lightType = type;
 	}
 	Light() {};
 
@@ -25,10 +30,14 @@ public:
 	float GetRadius() const { return radius; }
 	void SetRadius(float val) { radius = val; }
 
+	LightType GetType() const { return lightType; }
+	void SetType(LightType val) { lightType = val; }
+
 protected:
 	Vector3 position;
 	Vector4 colour;
 	float radius;
+	LightType lightType;
 
 };
 

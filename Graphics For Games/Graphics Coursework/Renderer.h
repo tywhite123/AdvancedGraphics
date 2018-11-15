@@ -7,6 +7,7 @@
 #include"..\..\nclgl\Frustum.h"
 #include "..\..\nclgl\HeightMap.h"
 #include "..\..\nclgl\TextMesh.h"
+#include "Scene1.h"
 #include "..\..\nclgl\ParticleBehaviour.h"
 #include <algorithm>
 
@@ -52,7 +53,7 @@ protected:
 
 	float time;
 	
-	GLuint cubeMap;
+	GLuint cubeMap[3];
 
 	Font* basicFont;
 	Shader* fontShader;
@@ -68,6 +69,10 @@ protected:
 	string rTime;
 
 	int scene;
+	bool rain;
+	bool profiler;
 	
+	Scene1* scene1;
+
 };
 
