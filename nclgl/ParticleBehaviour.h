@@ -5,7 +5,7 @@
 #include "SceneNode.h"
 
 const int MAX_OF_PARTICLES = 10000;
-const int PARTICLES_PER_FRAME_LIMIT = 2.0f;//0.016f * 10000.0f;
+const float PARTICLES_PER_FRAME_LIMIT = 2.0f;//0.016f * 10000.0f;
 
 class ParticleBehaviour : public SceneNode
 {

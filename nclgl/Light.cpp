@@ -21,5 +21,10 @@ void Light::UpdateLight(float msec)
 	if (Window::GetKeyboard()->KeyDown(KEYBOARD_RIGHT)) {
 		position += Vector3(-100, 0, 0) * msec;
 	}
-
+	if (Window::GetKeyboard()->KeyDown(KEYBOARD_Q)) {
+		position += Vector3(0, 100, 0) * msec;
+	}
+	if (Window::GetKeyboard()->KeyDown(KEYBOARD_E)) {
+		position += Vector3(0, -100, 0) * msec;
+	}
 }

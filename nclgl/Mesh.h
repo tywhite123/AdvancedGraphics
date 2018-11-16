@@ -26,6 +26,7 @@ public:
 	static Mesh* GenerateTriangle();  //Static so that it can be independant of any object. Returns a pointer to a mesh;
 	static Mesh* GenerateQuad();
 	static Mesh* GeneratePoint();
+	static Mesh* GeneratePoints(int noOfPoints);
 
 
 	void GenerateNormals();

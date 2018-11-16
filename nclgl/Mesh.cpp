@@ -133,7 +133,24 @@ Mesh * Mesh::GeneratePoint()
 
 	return m;
 
-	return nullptr;
+}
+
+Mesh * Mesh::GeneratePoints(int noOfPoints)
+{
+	Mesh* m = new Mesh;
+	m->numVertices = noOfPoints;
+	m->type = GL_POINTS;
+	m->vertices = new Vector3[m->numVertices];
+
+	for (unsigned int i = 0; i < m->numVertices; ++i) {
+		float x = (float)(rand() % 1000 - 500);
+		float y = (float)(rand() % 1000 - 500);
+		float z = (float)(rand() % 1000 - 500);
+		m->vertices[i] = Vector3(x, y, z);
+	}
+
+	m->BufferData();
+	return m;
 }
 
 void Mesh::GenerateNormals()

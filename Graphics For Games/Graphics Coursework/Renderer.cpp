@@ -16,6 +16,9 @@ Renderer::Renderer(Window & parent) : OGLRenderer(parent)
 	objLight->LoadOBJMesh(MESHDIR"sphere.obj");
 	Mesh* lightMesh = objLight;
 
+	Mesh* geomPart = Mesh::GeneratePoints(100);
+	geomPart->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"Barren Reds.JPG", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+
 	scene1 = new Scene1();
 
 	projMatrix = Matrix4::Perspective(1.0f, 100000.0f, (float)width / (float)height, 45.0f);
@@ -35,9 +38,10 @@ Renderer::Renderer(Window & parent) : OGLRenderer(parent)
 	skyboxShader = new Shader(SHADERDIR"SkyboxVertex.glsl", SHADERDIR"SkyboxFragment.glsl");
 	particleShader = new Shader(SHADERDIR"particleVertex.glsl", SHADERDIR"colourFragment.glsl");
 	Shader* lightShader = new Shader(SHADERDIR"matrixVertex.glsl", SHADERDIR"colourFragment.glsl");
+	Shader* pointShader = new Shader(SHADERDIR"TexturedVertex.glsl", SHADERDIR"TexturedFragment.glsl", SHADERDIR"pointGeom.glsl");
 
 	if (!terrainShader->LinkProgram() || !waterShader->LinkProgram() || !spyroShader->LinkProgram() || !fontShader->LinkProgram() || 
-		!skyboxShader->LinkProgram() || !particleShader->LinkProgram() || !lightShader->LinkProgram()) {
+		!skyboxShader->LinkProgram() || !particleShader->LinkProgram() || !lightShader->LinkProgram() || !pointShader->LinkProgram()) {
 		return;
 	}
 
@@ -91,6 +95,12 @@ Renderer::Renderer(Window & parent) : OGLRenderer(parent)
 	lightNode->SetModelMatrix(Matrix4::Translation(light->GetPosition()));
 	lightNode->SetBoundingRadius((RAW_WIDTH*HEIGHTMAP_X) / 2.0f * 15.0f);
 	//root->AddChild(lightNode);
+
+	SceneNode* pointNode = new SceneNode(geomPart, pointShader, Vector4(0.968f, 0.537f, 0.133f, 1));
+	pointNode->SetModelMatrix(Matrix4::Translation(Vector3(0, 0, 0)));
+	pointNode->SetScale(Vector3(10, 10, 10));
+	pointNode->SetBoundingRadius(100000.0f);
+	root->AddChild(pointNode);
 
 	scene1->SetModelMatrix(Matrix4::Translation(Vector3(0, 0, 0)));
 	scene1->SetScale(Vector3(1, 1, 1));
@@ -304,6 +314,7 @@ void Renderer::DrawNode(SceneNode * n)
 
 		glUniformMatrix4fv(glGetUniformLocation(program, "modelMatrix"), 1, false, (float*)&transform);
 		glUniform1f(glGetUniformLocation(program, "time"), time);
+		glUniform1f(glGetUniformLocation(program, "particleSize"), n->GetScale().x*100);
 		glUniform3fv(glGetUniformLocation(program, "cameraPos"), 1, (float*)&camera->GetPosition());
 		glUniform4fv(glGetUniformLocation(program, "nodeColour"), 1, (float*)&n->GetColour());
 /*
