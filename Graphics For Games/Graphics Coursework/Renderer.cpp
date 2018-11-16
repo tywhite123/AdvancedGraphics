@@ -23,7 +23,8 @@ Renderer::Renderer(Window & parent) : OGLRenderer(parent)
 
 	projMatrix = Matrix4::Perspective(1.0f, 100000.0f, (float)width / (float)height, 45.0f);
 	
-	camera = new Camera(-40,270, Vector3(-2000.0f, 3300.0f, 2000.0f));
+	//camera = new Camera(-40,270, Vector3(-2000.0f, 3300.0f, 2000.0f));
+	camera = new Camera(-40, 270, Vector3(10,15,10));
 	root = new SceneNode();
 	
 	basicFont = new Font(SOIL_load_OGL_texture(TEXTUREDIR"tahoma.tga", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_COMPRESS_TO_DXT), 16, 16);
@@ -193,6 +194,9 @@ void Renderer::UpdateScene(float msec)
 		rain = !rain;
 	else if (w->GetKeyboard()->KeyTriggered(KEYBOARD_F3))
 		profiler = !profiler;
+	else if (w->GetKeyboard()->KeyTriggered(KEYBOARD_F2)) {
+		cout << projMatrix*viewMatrix << endl;
+	}
 
 }
 
@@ -204,7 +208,7 @@ void Renderer::RenderScene()
 		BuildNodeLists(root);
 	}
 	else if (scene == 2) {
-
+		BuildNodeLists(root);
 	}
 	else {
 
