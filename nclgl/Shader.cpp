@@ -3,7 +3,7 @@
 
 
 
-Shader::Shader(string vertex, string frag, string geom)
+Shader::Shader(string vertex, string frag, string geom, string tcs, string tes)
 {
 	program = glCreateProgram();
 	objects[SHADER_VERTEX] = GenerateShader(vertex, GL_VERTEX_SHADER);
@@ -13,10 +13,21 @@ Shader::Shader(string vertex, string frag, string geom)
 		objects[SHADER_GEOMETRY] = GenerateShader(geom, GL_GEOMETRY_SHADER);
 		glAttachShader(program, objects[SHADER_GEOMETRY]);
 	}
+	if (!tcs.empty() && !tes.empty()) {
+		
+	}
 
 	glAttachShader(program, objects[SHADER_VERTEX]);
 	glAttachShader(program, objects[SHADER_FRAGMENT]);
 	SetDefaultAtrributes();
+}
+
+Shader::Shader(string compute)
+{
+	program = glCreateProgram();
+	//objects[SHADER_COMPUTE] ...
+
+	//glAttachShader(program, objects[SHADER_COMPUTE]);
 }
 
 Shader::~Shader()
@@ -57,6 +68,8 @@ void Shader::SetDefaultAtrributes()
 	glBindAttribLocation(program, TANGENT_BUFFER, "tangent");
 	glBindAttribLocation(program, TEXTURE_BUFFER, "texCoord");
 }
+
+
 
 bool Shader::LoadShaderFile(string from, string & into)
 {

@@ -15,8 +15,8 @@ Renderer9::Renderer9(Window & parent) : OGLRenderer(parent)
 		return;
 
 
-	hellData->AddAnim(MESHDIR"idle2.md5anim");
-	hellNode->PlayAnim(MESHDIR"idle2.md5anim");
+	hellData->AddAnim(MESHDIR"walk7.md5anim");
+	hellNode->PlayAnim(MESHDIR"walk7.md5anim");
 
 
 	projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 45.0f);
@@ -57,4 +57,8 @@ void Renderer9::UpdateScene(float msec)
 	viewMatrix = camera->BuildViewMatrix();
 
 	hellNode->Update(msec);
+	//TODO: sort this out tomorrow
+	if (hellNode->GetCurrentFrame() == hellNode->GetNumFrames()) {
+		hellNode->SetModelMatrix(hellNode->GetModelMatrix() * hellNode->GetSkeleton()->joints[0].transform);
+	}
 }

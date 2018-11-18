@@ -92,6 +92,9 @@ public:
 		}
 	}
 
+	int GetNumFrames() { return currentAnim->GetNumFrames(); }
+	int GetCurrentFrame() { return currentAnimFrame; }
+
 
 protected:
 	const MD5FileData&	sourceData;
