@@ -22,6 +22,7 @@
     <ProjectGuid>{5844D912-7DC1-4A49-9F98-F7FE1C053563}</ProjectGuid>
     <RootNamespace>Tutorial1</RootNamespace>
     <ProjectName>Tutorial 08 - Index Buffers</ProjectName>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

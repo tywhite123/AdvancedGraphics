@@ -14,7 +14,10 @@ Shader::Shader(string vertex, string frag, string geom, string tcs, string tes)
 		glAttachShader(program, objects[SHADER_GEOMETRY]);
 	}
 	if (!tcs.empty() && !tes.empty()) {
-		
+		objects[SHADER_TCS] = GenerateShader(tcs, GL_TESS_CONTROL_SHADER);
+		objects[SHADER_TES] = GenerateShader(tes, GL_TESS_EVALUATION_SHADER);
+		glAttachShader(program, objects[SHADER_TCS]);
+		glAttachShader(program, objects[SHADER_TES]);
 	}
 
 	glAttachShader(program, objects[SHADER_VERTEX]);

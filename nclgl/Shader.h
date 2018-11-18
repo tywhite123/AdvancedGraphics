@@ -27,7 +27,7 @@ protected:
 	bool LoadShaderFile(string from, string &into);
 	GLuint GenerateShader(string from, GLenum type);
 
-	GLuint objects[3];
+	GLuint objects[5];
 	GLuint program;
 
 	bool loadFailed;
