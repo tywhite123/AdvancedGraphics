@@ -70,6 +70,7 @@
     <ClCompile Include="Light.cpp">
       <Filter>Lights</Filter>
     </ClCompile>
+    <ClCompile Include="HeightMapFromJPG.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h" />
@@ -157,6 +158,7 @@
     <ClInclude Include="Light.h">
       <Filter>Lights</Filter>
     </ClInclude>
+    <ClInclude Include="HeightMapFromJPG.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Input">

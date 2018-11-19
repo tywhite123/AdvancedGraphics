@@ -5,13 +5,15 @@
 Renderer::Renderer(Window & parent) : OGLRenderer(parent)
 {
 	w = &parent;
+
+	//TODO: Remove this
 	heightMap = new HeightMap(TEXTUREDIR"terrain.raw");
 	water = new HeightMap(TEXTUREDIR"terrain.raw", 0.0f);
 	OBJMesh* m = new OBJMesh();
 	m->LoadOBJMesh(MESHDIR"spyro2\\spyro.obj");
 	spyro = m;
 	quad = Mesh::GenerateQuad();
-	particles = new ParticleBehaviour(4000, Vector3(0, 0, 0), Vector4(1, 1, 1, 1), Vector3(0, 0, 0), 100.0f);
+	particles = new ParticleBehaviour(1000, Vector3(0, 25000, 0), Vector4(1, 1, 1, 1), Vector3(0, 0, 0), 10000.0f);
 	OBJMesh* objLight = new OBJMesh();
 	objLight->LoadOBJMesh(MESHDIR"sphere.obj");
 	Mesh* lightMesh = objLight;
@@ -20,18 +22,20 @@ Renderer::Renderer(Window & parent) : OGLRenderer(parent)
 	geomPart->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"Barren Reds.JPG", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
 
 	scene1 = new Scene1();
+	scene2 = new Scene2();
 
 	projMatrix = Matrix4::Perspective(1.0f, 100000.0f, (float)width / (float)height, 45.0f);
 	
 	//camera = new Camera(-40,270, Vector3(-2000.0f, 3300.0f, 2000.0f));
 	camera = new Camera(-40, 270, Vector3(10,15,10));
 	root = new SceneNode();
+	root2 = new SceneNode();
 	
 	basicFont = new Font(SOIL_load_OGL_texture(TEXTUREDIR"tahoma.tga", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_COMPRESS_TO_DXT), 16, 16);
 
 	//camera->SetPosition(Vector3(0, 30, 175));
 	
-	
+	//TODO: Remove This
 	terrainShader = new Shader(SHADERDIR"BumpVertex.glsl", SHADERDIR"BumpFragment.glsl");
 	waterShader = new Shader(SHADERDIR"WaterVertex.glsl", SHADERDIR"WaterFragment.glsl");
 	spyroShader = new Shader(SHADERDIR"PerPixelVertex.glsl", SHADERDIR"PerPixelFragment.glsl");
@@ -45,10 +49,6 @@ Renderer::Renderer(Window & parent) : OGLRenderer(parent)
 		!skyboxShader->LinkProgram() || !particleShader->LinkProgram() || !lightShader->LinkProgram() || !pointShader->LinkProgram()) {
 		return;
 	}
-
-	heightMap->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"Barren Reds.JPG", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
-	heightMap->SetBumpMap(SOIL_load_OGL_texture(TEXTUREDIR"Barren RedsDOT3.JPG", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
-	water->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"water.TGA"/*"Barren Reds.JPG"*/, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
 	cubeMap[0] = SOIL_load_OGL_cubemap(TEXTUREDIR"rusted_west.jpg", TEXTUREDIR"rusted_east.jpg",
 		TEXTUREDIR"rusted_up.jpg", TEXTUREDIR"rusted_down.jpg", TEXTUREDIR"rusted_south.jpg",
 		TEXTUREDIR"rusted_north.jpg", SOIL_LOAD_RGB, SOIL_CREATE_NEW_ID, 0);
@@ -58,14 +58,18 @@ Renderer::Renderer(Window & parent) : OGLRenderer(parent)
 	cubeMap[2] = SOIL_load_OGL_cubemap(TEXTUREDIR"plains/plains_ft.tga", TEXTUREDIR"plains/plains_bk.tga",
 		TEXTUREDIR"plains/plains_up.tga", TEXTUREDIR"plains/plains_dn.tga", 
 		TEXTUREDIR"plains/plains_rt.tga", TEXTUREDIR"plains/plains_lf.tga", SOIL_LOAD_RGB, SOIL_CREATE_NEW_ID, 0);
+	grass = SOIL_load_OGL_texture(TEXTUREDIR"grass.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
 	
 
-	if (!heightMap->GetTexture() || !water->GetTexture() || !heightMap->GetBumpMap() || !cubeMap)
+	if (/*!heightMap->GetTexture() || !water->GetTexture() || !heightMap->GetBumpMap() ||*/ !cubeMap || !grass)
 		return;
 
+	//TODO: Remove This
 	SetTextureRepeating(heightMap->GetTexture(), true);
 	SetTextureRepeating(heightMap->GetBumpMap(), true);
 	SetTextureRepeating(water->GetTexture(), true);
+	SetTextureRepeating(grass, true);
+
 
 	SetTextureRepeating(scene1->GetHeightMapTex(), true);
 	SetTextureRepeating(scene1->GetHeightBumpMap(), true);
@@ -73,23 +77,6 @@ Renderer::Renderer(Window & parent) : OGLRenderer(parent)
 
 	light = new Light(Vector3((RAW_WIDTH*HEIGHTMAP_X / 2.0f)*10, 5000.0f*10, (RAW_HEIGHT*HEIGHTMAP_Z) / 2.0f*10), Vector4(1, 1, 1, 1.0f), (RAW_WIDTH*HEIGHTMAP_X) / 2.0f * 60.0f, DIRECTIONAL);
 
-	SceneNode* terrainNode = new SceneNode(heightMap, terrainShader, heightMap->GetTexture());
-	terrainNode->SetScale(Vector3(10, 10, 10));
-	terrainNode->SetBoundingRadius(100000.0f);
-	//root->AddChild(terrainNode);
-
-	SceneNode* waterNode = new SceneNode(water, waterShader, water->GetTexture());
-	waterNode->SetScale(Vector3(10, 10, 10));
-	waterNode->SetColour(Vector4(1, 1, 1, 0.5f));
-	waterNode->SetModelMatrix(Matrix4::Translation(Vector3(0, 2000, 0)));
-	waterNode->SetBoundingRadius(100000.0f);
-	//root->AddChild(waterNode);
-
-	SceneNode* spyroNode = new SceneNode(spyro, spyroShader, spyro->GetTexture());
-	spyroNode->SetScale(Vector3(1000, 1000, 1000));
-	spyroNode->SetModelMatrix(Matrix4::Translation(Vector3(10000, 3000, 15000)) * Matrix4::Rotation(90.0f, Vector3(0, 1, 0)));
-	spyroNode->SetBoundingRadius(1000.0f);
-	//root->AddChild(spyroNode);
 
 	SceneNode* lightNode = new SceneNode(lightMesh, lightShader, Vector4(0.992f, 0.721f, 0.074f, 1.0f));
 	lightNode->SetScale(Vector3((RAW_WIDTH*HEIGHTMAP_X) / 2.0f, (RAW_WIDTH*HEIGHTMAP_X) / 2.0f, (RAW_WIDTH*HEIGHTMAP_X) / 2.0f));
@@ -107,11 +94,15 @@ Renderer::Renderer(Window & parent) : OGLRenderer(parent)
 	scene1->SetScale(Vector3(1, 1, 1));
 	root->AddChild(scene1);
 
+	scene2->SetModelMatrix(Matrix4::Translation(Vector3(0, 0, 0)));
+	scene2->SetScale(Vector3(1, 1, 1));
+	root2->AddChild(scene2);
+
 
 	particles->SetModelMatrix(Matrix4::Translation(Vector3(0, 0, 0)));
 	particles->SetScale(Vector3(100, 100, 100));
 	particles->SetBoundingRadius(100000.0f);
-	particles->SetColour(Vector4(0.3f, 0.3f, 1, 0.9f));
+	particles->SetColour(Vector4(1.f, 1.f, 1.f, 0.9f));
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
@@ -126,11 +117,13 @@ Renderer::Renderer(Window & parent) : OGLRenderer(parent)
 	start = 0;
 	end = 0;
 	timeSinceProfile = 0;
+	timeSinceSwitch = 0;
 	framerate = 0;
 	testEnd = 0;
 	scene = 0;
 	rain = false;
 	profiler = false;
+	switching = false;
 }
 
 Renderer::~Renderer()
@@ -167,8 +160,10 @@ void Renderer::UpdateScene(float msec)
 	
 
 	time += msec;
+	
 
 	root->Update(msec);
+	root2->Update(msec);
 
 	end = w->GetTimer()->GetMS();
 
@@ -176,6 +171,7 @@ void Renderer::UpdateScene(float msec)
 	float renderTime = end - start;
 	rTime = "Render Time: " + to_string(renderTime);
 	timeSinceProfile += renderTime;
+	timeSinceSwitch += renderTime;
 	if (timeSinceProfile >= 1000.0f) {
 		fps = "FPS: " + to_string(framerate);
 		
@@ -197,6 +193,30 @@ void Renderer::UpdateScene(float msec)
 	else if (w->GetKeyboard()->KeyTriggered(KEYBOARD_F2)) {
 		cout << projMatrix*viewMatrix << endl;
 	}
+	else if (w->GetKeyboard()->KeyTriggered(KEYBOARD_LEFT)) {
+		scene--;
+		if (scene < 0) {
+			scene = 2;
+		}
+	}
+	else if (w->GetKeyboard()->KeyTriggered(KEYBOARD_RIGHT)) {
+		scene++;
+		if (scene > 2) {
+			scene = 0;
+		}
+	}
+	else if (w->GetKeyboard()->KeyTriggered(KEYBOARD_PAUSE)) {
+		switching = !switching;
+	}
+
+
+	if (switching && timeSinceSwitch >= 1000) {
+		scene++;
+		if (scene > 2) {
+			scene = 0;
+		}
+		timeSinceSwitch = 0;
+	}
 
 }
 
@@ -205,7 +225,8 @@ void Renderer::RenderScene()
 	if (scene == 0)
 		BuildNodeLists(root);
 	else if (scene == 1) {
-		BuildNodeLists(root);
+		BuildNodeLists(root2);
+		//glDisable(GL_CULL_FACE);
 	}
 	else if (scene == 2) {
 		BuildNodeLists(root);
@@ -313,8 +334,11 @@ void Renderer::DrawNode(SceneNode * n)
 		glUniform1i(glGetUniformLocation(program, "diffuseTex"), 0);
 		glUniform1i(glGetUniformLocation(program, "bumpTex"), 1);
 		glUniform1i(glGetUniformLocation(program, "cubeTex"), 2);
+		glUniform1i(glGetUniformLocation(program, "grassTex"), 3);
 		glActiveTexture(GL_TEXTURE2);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap[scene]);
+		glActiveTexture(GL_TEXTURE3);
+		glBindTexture(GL_TEXTURE_2D, grass);
 
 		glUniformMatrix4fv(glGetUniformLocation(program, "modelMatrix"), 1, false, (float*)&transform);
 		glUniform1f(glGetUniformLocation(program, "time"), time);
@@ -356,7 +380,7 @@ void Renderer::DrawSkybox()
 void Renderer::DrawParticleSystem()
 {
 	glDisable(GL_CULL_FACE);
-	Matrix4 transform = particles->GetModelMatrix() * Matrix4::Translation(Vector3(0, 10000, 0)) * Matrix4::Rotation(-90, Vector3(0, 0, 1)) * Matrix4::Scale(particles->GetScale());
+	Matrix4 transform = particles->GetModelMatrix() * Matrix4::Translation(particles->GetCenter()) * Matrix4::Rotation(-90, Vector3(0, 0, 1)) * Matrix4::Scale(particles->GetScale());
 	//Matrix4 transform = particles->GetModelMatrix() * Matrix4::Translation(Vector3(20000,25000,20000)) * Matrix4::Rotation(-90, Vector3(0,0,1)) * Matrix4::Scale(particles->GetScale());
 
 

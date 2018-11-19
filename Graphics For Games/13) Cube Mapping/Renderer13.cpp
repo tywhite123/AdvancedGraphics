@@ -12,9 +12,9 @@ Renderer13::Renderer13(Window & parent) : OGLRenderer(parent)
 
 	camera->SetPosition(Vector3(RAW_WIDTH * HEIGHTMAP_X / 2.0f, 500.0f, RAW_HEIGHT*HEIGHTMAP_Z));
 	light = new Light(Vector3(RAW_WIDTH*HEIGHTMAP_X / 2.0f, 500.0f, RAW_HEIGHT*HEIGHTMAP_Z / 2.0f),
-		Vector4(1, 1, 1, 1), RAW_WIDTH*HEIGHTMAP_X / 2.0f);
+		Vector4(1, 1, 1, 1), RAW_WIDTH*HEIGHTMAP_X , SPOT);
 
-	reflectShader = new Shader(SHADERDIR"PerPixelVertex.glsl", SHADERDIR"ReflectFragment.glsl");
+	reflectShader = new Shader(SHADERDIR"basicVertLight.glsl", SHADERDIR"ReflectFragment.glsl", "", SHADERDIR"WaterTessControl.glsl", SHADERDIR"WaterTessEval.glsl");
 	skyboxShader = new Shader(SHADERDIR"SkyboxVertex.glsl", SHADERDIR"SkyboxFragment.glsl");
 	lightShader = new Shader(SHADERDIR"PerPixelVertex.glsl", SHADERDIR"PerPixelFragment.glsl");
 
@@ -77,6 +77,7 @@ void Renderer13::UpdateScene(float msec)
 	camera->UpdateCamera(msec);
 	viewMatrix = camera->BuildViewMatrix();
 	waterRotate += msec / 1000.0f;
+	this->msec += msec * ((rand()%100)/25 + (rand()%20/5));
 }
 
 void Renderer13::DrawHeightmap()
@@ -93,7 +94,7 @@ void Renderer13::DrawHeightmap()
 
 	UpdateShaderMatrices();
 
-	heightMap->Draw();
+	//heightMap->Draw();
 
 	glUseProgram(0);
 
@@ -101,12 +102,17 @@ void Renderer13::DrawHeightmap()
 
 void Renderer13::DrawWater()
 {
+
+	quad->SetType(GL_PATCHES);
 	SetCurrentShader(reflectShader);
 	SetShaderLight(*light);
 
 	glUniform3fv(glGetUniformLocation(currentShader->GetProgram(), "cameraPos"), 1, (float*)&camera->GetPosition());
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), 0);
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "cubeTex"), 2);
+	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "time"), msec);
+	glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "waterWave"), waterRotate);
+	glPatchParameteri(GL_PATCH_VERTICES, 4);
 
 	glActiveTexture(GL_TEXTURE2);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap);
@@ -133,6 +139,7 @@ void Renderer13::DrawWater()
 
 void Renderer13::DrawSkybox()
 {
+	quad->SetType(GL_TRIANGLE_STRIP);
 	glDepthMask(GL_FALSE);
 	SetCurrentShader(skyboxShader);
 	

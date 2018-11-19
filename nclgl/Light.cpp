@@ -8,17 +8,17 @@ Light::~Light()
 
 void Light::UpdateLight(float msec)
 {
-	if (Window::GetKeyboard()->KeyDown(KEYBOARD_UP)) {
+	if (Window::GetKeyboard()->KeyDown(KEYBOARD_N)) {
 		position += Vector3(0,0,100) * msec;
 	}
-	if (Window::GetKeyboard()->KeyDown(KEYBOARD_DOWN)) {
+	if (Window::GetKeyboard()->KeyDown(KEYBOARD_M)) {
 		position += Vector3(0, 0, -100) * msec;
 	}
 
-	if (Window::GetKeyboard()->KeyDown(KEYBOARD_LEFT)) {
+	if (Window::GetKeyboard()->KeyDown(KEYBOARD_K)) {
 		position += Vector3(100, 0, 0) * msec;
 	}
-	if (Window::GetKeyboard()->KeyDown(KEYBOARD_RIGHT)) {
+	if (Window::GetKeyboard()->KeyDown(KEYBOARD_L)) {
 		position += Vector3(-100, 0, 0) * msec;
 	}
 	if (Window::GetKeyboard()->KeyDown(KEYBOARD_Q)) {

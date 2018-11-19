@@ -16,12 +16,16 @@ ParticleBehaviour::ParticleBehaviour(int noOfParticles, Vector3 center, Vector4 
 {
 	Mesh* m = Mesh::GenerateQuad();
 	particles.reserve(noOfParticles);
-	for (int i = 0; i < noOfParticles; ++i)
-		particles.push_back(new Particle(Vector3(rand()%10000, center.y, center.z), vel, colour, life, m));
+	for (int i = 0; i < noOfParticles; ++i) {
+		float x = (float)rand() / (float)RAND_MAX;
+		float z = (float)rand() / (float)RAND_MAX;
+		particles.push_back(new Particle(Vector3(systemCenter.y, rand() % 500 + x, rand() % 500 + z), vel, colour, life, m));
+	}
 	last = 0;
 	particleCount = 0;
 	systemCenter = center;
 	this->life = life;
+	newParticle = 0;
 }
 
 
@@ -34,9 +38,9 @@ ParticleBehaviour::~ParticleBehaviour()
 void ParticleBehaviour::UpdateSystem(float msec)
 {
 	
-	int newParticle = (msec*10000.0);
-	if (newParticle > PARTICLES_PER_FRAME_LIMIT)
-		newParticle = PARTICLES_PER_FRAME_LIMIT;
+	//int newParticle = 0;// (msec*10000.0);
+	//if (newParticle > PARTICLES_PER_FRAME_LIMIT)
+	newParticle += PARTICLES_PER_FRAME_LIMIT*msec;
 
 	for (int i = 0; i < particles.size(); ++i) {
 		if (particles[i]->GetDraw()) {
@@ -48,26 +52,29 @@ void ParticleBehaviour::UpdateSystem(float msec)
 
 			particles[i]->UpdateLife(msec);
 			if (particles[i]->GetLife() >= 0) {
-				if (particles[i]->GetDraw()) {
+				//if (particles[i]->GetDraw()) {
 					particles[i]->UpdatePosition(particles[i]->GetVelocity());
-				/*	particles[i]->UpdateVelocity(Vector3(0, grav, 0));*/
+					particles[i]->SetVelocity(Vector3(0.02f * msec, 0, 0));
 					
 					particles[i]->Update(msec);
-				}
+				//}
 			}
 			else {
 				particles[i]->SetDraw(false);
 				particles[i]->SetLife(life);
 				float x = (float)rand() / (float)RAND_MAX;
 				float z = (float)rand() / (float)RAND_MAX;
-				particles[i]->SetPosition(Vector3(systemCenter.y, rand() % 100 + x, rand() % 100 + z));
+				particles[i]->SetPosition(Vector3(0, rand() % 500 + x, rand() % 500 + z));
 			}
 		}
 	}
 	
 
 	//for(int i = 0; i < newParticle; ++i) {
+	if (newParticle >= 1) {
 		EmitParticle();
+		newParticle = 0;
+	}
 	//}
 
 	
@@ -119,7 +126,8 @@ int ParticleBehaviour::UnusedParticles()
 			return i;
 		}
 	}
-	return 0;
+	//return 0;
+	return particles.size() - 1;
 }
 
 void ParticleBehaviour::EmitParticle()
@@ -128,7 +136,7 @@ void ParticleBehaviour::EmitParticle()
 	float dirZ = rand() % 10 - 5;
 	float dirY = rand() % 10 - 5;
 	int i = UnusedParticles();
-	particles[i]->SetVelocity(Vector3(/*dirX*/10, dirY, dirZ));
+	particles[i]->SetVelocity(Vector3(/*dirX*/0, 0,0));
 	//particles[i]->GetVelocity().Normalise();
 	particles[i]->SetDraw(true);
 

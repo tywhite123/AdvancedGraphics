@@ -38,6 +38,10 @@ public:
 	void SetTexture(GLuint tex) { texture = tex; }
 	GLuint GetTexture() { return texture; }
 
+	void SetType(GLuint t) { type = t; }
+	GLuint GetType() { return type; }
+
+
 
 protected:
 	void BufferData();

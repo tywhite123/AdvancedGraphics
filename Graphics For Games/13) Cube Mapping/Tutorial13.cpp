@@ -2,8 +2,12 @@
 
 #include "../../nclgl/window.h"
 #include "Renderer13.h"
+#include <time.h>
 
 int main() {
+
+	srand(time(NULL));
+
 	Window w("Cube Mapping! sky textures courtesy of http://www.hazelwhorley.com", 800,600,false);
 	if(!w.HasInitialised()) {
 		return -1;

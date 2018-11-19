@@ -1,16 +1,15 @@
-#include "Scene1.h"
-
-
+#include "Scene2.h"
 #include "..\..\nclgl\OBJMesh.h"
 
-Scene1::Scene1()
+
+Scene2::Scene2()
 {
 	//heightMap = new HeightMap(TEXTUREDIR"ilkley.raw");
-	hmap = new HeightMapFromJPG(TEXTUREDIR"ilkley.jpg");
-	water = new HeightMap(TEXTUREDIR"terrain.raw", 0.0f);
+	//hmap = new HeightMapFromJPG(TEXTUREDIR"ilkley.jpg");
+	//water = new HeightMap(TEXTUREDIR"terrain.raw", 0.0f);
 	OBJMesh* m = new OBJMesh();
-	m->LoadOBJMesh(MESHDIR"spyro2\\spyro.obj");
-	spyro = m;
+	m->LoadOBJMesh(MESHDIR"tundratri.obj");
+	winterTundra = m;
 	quad = Mesh::GenerateQuad();
 	/*particles = new ParticleBehaviour(1000, Vector3(0, 0, 0), Vector4(1, 1, 1, 1), Vector3(0, 0, 0), 500.0f);*/
 
@@ -22,34 +21,34 @@ Scene1::Scene1()
 	//camera->SetPosition(Vector3(0, 30, 175));
 
 
-	terrainShader = new Shader(SHADERDIR"BumpVertex.glsl", SHADERDIR"TerrainFragment.glsl");
-	waterShader = new Shader(SHADERDIR"WaterVertex.glsl", SHADERDIR"WaterFragment.glsl");
+	//terrainShader = new Shader(SHADERDIR"BumpVertex.glsl", SHADERDIR"TerrainFragment.glsl");
+	//waterShader = new Shader(SHADERDIR"WaterVertex.glsl", SHADERDIR"WaterFragment.glsl");
 	spyroShader = new Shader(SHADERDIR"PerPixelVertex.glsl", SHADERDIR"PerPixelFragment.glsl");
 	//fontShader = new Shader(SHADERDIR"FontVert.glsl", SHADERDIR"FontFrag.glsl");
 	skyboxShader = new Shader(SHADERDIR"SkyboxVertex.glsl", SHADERDIR"SkyboxFragment.glsl");
-	particleShader = new Shader(SHADERDIR"particleVertex.glsl", SHADERDIR"colourFragment.glsl");
+	//particleShader = new Shader(SHADERDIR"particleVertex.glsl", SHADERDIR"colourFragment.glsl");
 
-	if (!terrainShader->LinkProgram() || !waterShader->LinkProgram() || !spyroShader->LinkProgram() || /*!fontShader->LinkProgram() ||*/
-		!skyboxShader->LinkProgram() || !particleShader->LinkProgram()) {
+	if (/*!terrainShader->LinkProgram() || !waterShader->LinkProgram() || */!spyroShader->LinkProgram() || /*!fontShader->LinkProgram() ||*/
+		!skyboxShader->LinkProgram() /*|| !particleShader->LinkProgram()*/) {
 		return;
 	}
 
-	hmap->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"Barren Reds.JPG", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
-	hmap->SetBumpMap(SOIL_load_OGL_texture(TEXTUREDIR"Barren RedsDOT3.JPG", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
-	water->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"water.TGA"/*"Barren Reds.JPG"*/, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+	//hmap->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"Barren Reds.JPG", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+	//hmap->SetBumpMap(SOIL_load_OGL_texture(TEXTUREDIR"Barren RedsDOT3.JPG", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
+	//water->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"water.TGA"/*"Barren Reds.JPG"*/, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
 	cubeMap = SOIL_load_OGL_cubemap(TEXTUREDIR"rusted_west.jpg", TEXTUREDIR"rusted_east.jpg",
 		TEXTUREDIR"rusted_up.jpg", TEXTUREDIR"rusted_down.jpg", TEXTUREDIR"rusted_south.jpg",
 		TEXTUREDIR"rusted_north.jpg", SOIL_LOAD_RGB, SOIL_CREATE_NEW_ID, 0);
 
 
-	if (!hmap->GetTexture() || !water->GetTexture() || !hmap->GetBumpMap()|| !cubeMap)
+	if (/*!hmap->GetTexture() || !water->GetTexture() || !hmap->GetBumpMap() || */!cubeMap)
 		return;
 
 	//SET TEXTURE REPEATING
 
 	/*light = new Light(Vector3((RAW_WIDTH*HEIGHTMAP_X / 2.0f) * 10, 100.0f * 10, (RAW_HEIGHT*HEIGHTMAP_Z) / 2.0f * 10), Vector4(1, 1, 1, 0.7f), (RAW_WIDTH*HEIGHTMAP_X) / 2.0f * 15.0f);*/
 
-	SceneNode* terrainNode = new SceneNode(hmap, terrainShader,hmap->GetTexture());
+	/*SceneNode* terrainNode = new SceneNode(hmap, terrainShader, hmap->GetTexture());
 	terrainNode->SetScale(Vector3(10, 10, 10));
 	terrainNode->SetBoundingRadius(100000.0f);
 	AddChild(terrainNode);
@@ -63,18 +62,19 @@ Scene1::Scene1()
 
 	SceneNode* spyroNode = new SceneNode(spyro, spyroShader, spyro->GetTexture());
 	spyroNode->SetScale(Vector3(1000, 1000, 1000));
-	spyroNode->SetModelMatrix(Matrix4::Translation(Vector3(10000, 3000, 15000)) * Matrix4::Rotation(90.0f, Vector3(1, 1, 0)));
+	spyroNode->SetModelMatrix(Matrix4::Translation(Vector3(10000, 3000, 15000)) * Matrix4::Rotation(90.0f, Vector3(0, 1, 0)));
 	spyroNode->SetBoundingRadius(1000.0f);
-	AddChild(spyroNode);
+	AddChild(spyroNode);*/
 
+	SceneNode* tundraNode = new SceneNode(winterTundra, spyroShader, winterTundra->GetTexture());
+	tundraNode->SetScale(Vector3(1, 1, 1));
+	tundraNode->SetModelMatrix(Matrix4::Translation(Vector3(0, 0, 0)) * Matrix4::Rotation(-90.0f, Vector3(1,0,0)));
+	tundraNode->SetBoundingRadius(1000000.0f);
+	AddChild(tundraNode);
 
-	//particles->SetModelMatrix(Matrix4::Translation(Vector3(0, 0, 0)));
-	//particles->SetScale(Vector3(50, 50, 50));
-	//particles->SetBoundingRadius(100000.0f);
-	//particles->SetColour(Vector4(0.3f, 0.3f, 1, 0.9f));
 }
 
 
-Scene1::~Scene1()
+Scene2::~Scene2()
 {
 }

@@ -63,7 +63,7 @@ void Renderer9::UpdateScene(float msec)
 
 	hellNode->Update(msec);
 	//TODO: sort this out tomorrow
-	if (hellNode->GetCurrentFrame() == hellNode->GetNumFrames()) {
+	if (hellNode->GetCurrentFrame() >= hellNode->GetNumFrames()) {
 		hellNode->SetModelMatrix(hellNode->GetModelMatrix() * Matrix4::Translation(-hellNode->GetSkeleton()->joints[0].position));
 	}
 }

@@ -1,7 +1,6 @@
 #include "HeightMap.h"
 
 
-
 HeightMap::HeightMap(string name, float heightY)
 {
 	ifstream file(name, ios::binary);

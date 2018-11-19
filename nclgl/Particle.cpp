@@ -21,5 +21,5 @@ void Particle::Draw()
 
 void Particle::Update(float msec)
 {
-	particleMatrix = particleMatrix * Matrix4::Translation(position);
+	particleMatrix = Matrix4::Translation(position);
 }

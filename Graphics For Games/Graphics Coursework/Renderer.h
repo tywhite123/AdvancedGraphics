@@ -8,6 +8,7 @@
 #include "..\..\nclgl\HeightMap.h"
 #include "..\..\nclgl\TextMesh.h"
 #include "Scene1.h"
+#include "Scene2.h"
 #include "..\..\nclgl\ParticleBehaviour.h"
 #include <algorithm>
 
@@ -32,6 +33,7 @@ protected:
 	void DrawParticleSystem();
 
 	SceneNode* root;
+	SceneNode* root2;
 	ParticleBehaviour* particles;
 	Camera* camera;
 	HeightMap* heightMap;
@@ -54,6 +56,7 @@ protected:
 	float time;
 	
 	GLuint cubeMap[3];
+	GLuint grass;
 
 	Font* basicFont;
 	Shader* fontShader;
@@ -63,6 +66,8 @@ protected:
 	float end;
 	float testEnd;
 	float timeSinceProfile;
+	float timeSinceSwitch;
+	bool switching;
 	int framerate;
 	Window* w;
 	string fps;
@@ -73,6 +78,7 @@ protected:
 	bool profiler;
 	
 	Scene1* scene1;
+	Scene2* scene2;
 
 };
 

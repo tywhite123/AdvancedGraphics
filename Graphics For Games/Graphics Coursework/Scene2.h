@@ -4,12 +4,12 @@
 #include "..\..\nclgl\Camera.h"
 #include "..\..\nclgl\ParticleBehaviour.h"
 #include "..\..\nclgl\HeightMapFromJPG.h"
-class Scene1 :
+class Scene2 :
 	public SceneNode
 {
 public:
-	Scene1();
-	~Scene1();
+	Scene2();
+	~Scene2();
 
 	GLuint GetHeightMapTex() { return hmap->GetTexture(); }
 	GLuint GetHeightBumpMap() { return hmap->GetBumpMap(); }
@@ -18,6 +18,8 @@ public:
 
 
 protected:
+
+	Mesh* winterTundra;
 	SceneNode* root;
 	Camera* camera;
 	HeightMap* heightMap;
@@ -35,4 +37,3 @@ protected:
 
 	GLuint cubeMap;
 };
-
