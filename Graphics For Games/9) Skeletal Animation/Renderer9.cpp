@@ -12,6 +12,7 @@ Renderer9::Renderer9(Window & parent) : OGLRenderer(parent)
 	hellNode = new MD5Node(*hellData);
 
 	hellNode->SetScale(Vector3(1, 1, 1));
+	hellNode->SetColour(Vector4(1, 1, 1, 1));
 
 	if (!currentShader->LinkProgram())
 		return;
@@ -45,7 +46,7 @@ void Renderer9::RenderScene()
 	UpdateShaderMatrices();
 	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), 0);
 	glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "modelMatrix"), 1, false, (float*)&transform);
-
+	glUniform4fv(glGetUniformLocation(currentShader->GetProgram(), "nodeColour"), 1, (float*)&hellNode->GetColour());
 	
 
 	hellNode->Draw(*this);
@@ -63,7 +64,7 @@ void Renderer9::UpdateScene(float msec)
 
 	hellNode->Update(msec);
 	//TODO: sort this out tomorrow
-	if (hellNode->GetCurrentFrame() >= hellNode->GetNumFrames()) {
+	/*if (hellNode->GetCurrentFrame() >= hellNode->GetNumFrames()) {
 		hellNode->SetModelMatrix(hellNode->GetModelMatrix() * Matrix4::Translation(-hellNode->GetSkeleton()->joints[0].position));
-	}
+	}*/
 }

@@ -143,10 +143,11 @@ Mesh * Mesh::GeneratePoints(int noOfPoints)
 	m->vertices = new Vector3[m->numVertices];
 
 	for (unsigned int i = 0; i < m->numVertices; ++i) {
-		float x = (float)(rand() % 1000 - 500);
+		/*float x = (float)(rand() % 1000 - 500);
 		float y = (float)(rand() % 1000 - 500);
 		float z = (float)(rand() % 1000 - 500);
-		m->vertices[i] = Vector3(x, y, z);
+		m->vertices[i] = Vector3(x, y, z);*/
+		m->vertices[i] = Vector3(0, 0, 0);
 	}
 
 	m->BufferData();

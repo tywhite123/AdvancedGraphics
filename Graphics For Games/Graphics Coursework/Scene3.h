@@ -2,6 +2,7 @@
 #include "..\..\nclgl\SceneNode.h"
 #include "..\..\nclgl\MD5Mesh.h"
 #include "..\..\nclgl\MD5Node.h"
+
 class Scene3 :
 	public SceneNode
 {
@@ -10,6 +11,9 @@ public:
 	~Scene3();
 
 	GLuint GetFloorTex() { return floor->GetTexture(); }
+
+	virtual void Update(float msec);
+
 
 
 protected:

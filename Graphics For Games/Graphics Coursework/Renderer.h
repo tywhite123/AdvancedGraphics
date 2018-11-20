@@ -9,8 +9,12 @@
 #include "..\..\nclgl\TextMesh.h"
 #include "Scene1.h"
 #include "Scene2.h"
+#include "Scene3.h"
 #include "..\..\nclgl\ParticleBehaviour.h"
 #include <algorithm>
+
+
+#define SHADOWSIZE 2048
 
 class Renderer : public OGLRenderer
 {
@@ -24,16 +28,31 @@ public:
 	void	DrawText(const std::string &text, const Vector3 &position, const float size = 10.0f, const bool perspective = false);
 
 protected:
+
+	//RENDER FUNCTIONS
 	void BuildNodeLists(SceneNode* from);
 	void SortNodeLists();
 	void ClearNodeLists();
 	void DrawNodes();
 	void DrawNode(SceneNode* n);
 	void DrawSkybox();
+	void DrawScene();
 	void DrawParticleSystem();
+	void DrawShadows();
+	void DrawPostProcess();
+	void PresentScene();
+	void DrawUI();
+	float partEnd;
 
+	//FBO SETUPS
+	void SetupShadows();
+	//ADD IN GEN SCREEN TEX FROM DEFERRED
+	void GenerateScreenTextures(GLuint & into, bool depth);
+
+	//VARIABLES
 	SceneNode* root;
 	SceneNode* root2;
+	SceneNode* root3;
 	ParticleBehaviour* particles;
 	Camera* camera;
 	HeightMap* heightMap;
@@ -79,6 +98,19 @@ protected:
 	
 	Scene1* scene1;
 	Scene2* scene2;
+	Scene3* scene3;
 
+	bool shadows;
+	bool drawingShadows;
+	GLuint shadowTex;
+	GLuint shadowFBO;
+	Shader* shadowShader;
+	Matrix4 shadowMatrix;
+
+	Shader* lightShader;
+	Shader* pointShader;
+
+	GLuint sceneFBO;
+	GLuint sceneTex;
 };
 

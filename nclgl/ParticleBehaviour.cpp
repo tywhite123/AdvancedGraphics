@@ -14,7 +14,8 @@
 
 ParticleBehaviour::ParticleBehaviour(int noOfParticles, Vector3 center, Vector4 colour, Vector3 vel, float life)
 {
-	Mesh* m = Mesh::GenerateQuad();
+	Mesh*m = Mesh::GenerateQuad();
+	//Mesh* m = Mesh::GeneratePoints(1);
 	particles.reserve(noOfParticles);
 	for (int i = 0; i < noOfParticles; ++i) {
 		float x = (float)rand() / (float)RAND_MAX;
@@ -100,11 +101,12 @@ void ParticleBehaviour::UpdateSystem(float msec)
 
 }
 
-void ParticleBehaviour::Draw(GLuint matrixLoc)
+void ParticleBehaviour::Draw(GLuint program)
 {
 	for (int i = 0; i < particles.size(); ++i) {
 		if (particles[i]->GetDraw()) {
-			glUniformMatrix4fv(matrixLoc, 1, false, (float*)&particles[i]->GetParticleMatrix());
+			glUniformMatrix4fv(glGetUniformLocation(program, "particleMatrix"), 1, false, (float*)&particles[i]->GetParticleMatrix());
+			glUniform1f(glGetUniformLocation(program, "particleSize"), GetScale().x);
 			particles[i]->Draw();
 		}
 	}

@@ -27,10 +27,10 @@ Scene1::Scene1()
 	spyroShader = new Shader(SHADERDIR"PerPixelVertex.glsl", SHADERDIR"PerPixelFragment.glsl");
 	//fontShader = new Shader(SHADERDIR"FontVert.glsl", SHADERDIR"FontFrag.glsl");
 	skyboxShader = new Shader(SHADERDIR"SkyboxVertex.glsl", SHADERDIR"SkyboxFragment.glsl");
-	particleShader = new Shader(SHADERDIR"particleVertex.glsl", SHADERDIR"colourFragment.glsl");
+//	particleShader = new Shader(SHADERDIR"particleVertex.glsl", SHADERDIR"colourFragment.glsl");
 
 	if (!terrainShader->LinkProgram() || !waterShader->LinkProgram() || !spyroShader->LinkProgram() || /*!fontShader->LinkProgram() ||*/
-		!skyboxShader->LinkProgram() || !particleShader->LinkProgram()) {
+		!skyboxShader->LinkProgram() /*|| !particleShader->LinkProgram()*/) {
 		return;
 	}
 

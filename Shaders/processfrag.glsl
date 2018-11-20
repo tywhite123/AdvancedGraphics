@@ -4,6 +4,9 @@ uniform sampler2D diffuseTex;
 uniform vec2 pixelSize;
 uniform int isVertical;
 
+//uniform int effectType;
+
+
 in Vertex{
     vec2 texCoord;
     vec4 colour;

@@ -31,9 +31,13 @@ void	MD5Node::Update(float msec) {
 		//Time to calculate which frame we're now on!
 		while(frameTime < 0) {
 			frameTime += 1000.0f / currentAnim->GetFrameRate();
+			int lastFrame = currentAnimFrame;
 			//all animations are assumed to be 'looping', so we use the modulo
 			//operator to 'wrap around' if we go past the end of the anim
 			currentAnimFrame = currentAnimFrame++%(currentAnim->GetNumFrames());
+
+			if(currentAnimFrame <= lastFrame)
+				SetModelMatrix(GetModelMatrix() * Matrix4::Translation(-GetSkeleton()->joints[0].position));
 		}
 		//Transform this particular node's skeleton to the right frame of
 		//anim

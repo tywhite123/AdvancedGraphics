@@ -8,7 +8,7 @@ Scene2::Scene2()
 	//hmap = new HeightMapFromJPG(TEXTUREDIR"ilkley.jpg");
 	//water = new HeightMap(TEXTUREDIR"terrain.raw", 0.0f);
 	OBJMesh* m = new OBJMesh();
-	m->LoadOBJMesh(MESHDIR"tundratri.obj");
+	m->LoadOBJMesh(MESHDIR"cube.obj");
 	winterTundra = m;
 	quad = Mesh::GenerateQuad();
 	/*particles = new ParticleBehaviour(1000, Vector3(0, 0, 0), Vector4(1, 1, 1, 1), Vector3(0, 0, 0), 500.0f);*/
