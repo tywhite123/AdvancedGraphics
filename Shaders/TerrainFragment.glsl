@@ -30,7 +30,8 @@ void main(void){
 
     //vec4 diffuse = texture(diffuseTex, IN.texCoord);
    
-    vec4 diffuse = mix(texture(diffuseTex, IN.texCoord), texture(grassTex, IN.texCoord), mixVal); 
+    vec4 diffuse = mix(texture(diffuseTex, IN.texCoord), texture(grassTex, IN.texCoord), mixVal);
+    //vec4 diffuse = mix(texture(diffuseTex, IN.texCoord), vec4(1,1,1,1), mixVal); 
     mat3 TBN = mat3(IN.tangent, IN.binormal, IN.normal);
 
     vec3 normal = normalize(TBN * (texture(bumpTex, IN.texCoord).rgb * 2.0 - 1.0));

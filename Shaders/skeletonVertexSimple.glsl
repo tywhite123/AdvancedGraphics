@@ -3,6 +3,7 @@
 uniform mat4 modelMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 projMatrix;
+uniform vec4 nodeColour;
 
 uniform samplerBuffer weightTex;
 uniform samplerBuffer transformTex;
@@ -12,13 +13,14 @@ in 	vec3 normal;
 in 	vec3 tangent;
 in  vec2 texCoord;
 
-layout(location = 8) in vec2 weighting;
+layout(location = 6) in vec2 weighting;
 
 //			target->weights[j].x = subMesh.verts[j].weightElements;
 //			target->weights[j].y = subMesh.verts[j].weightIndex;
 
 out Vertex	{
 	vec2 	texCoord;
+	vec4	colour;
 } OUT;
 
 //struct MD5Weight {
@@ -51,6 +53,7 @@ void main(void)	{
 	vertPos.w = 1.0f;
 	
 	OUT.texCoord 	= texCoord;
+	OUT.colour		= nodeColour;
 	
 	gl_Position		= (projMatrix * viewMatrix * modelMatrix) * vertPos;
 }

@@ -39,6 +39,9 @@ public:
 		return (a->distanceFromCamera < b->distanceFromCamera) ? true : false;
 	}
 
+	void SetSkeletal(bool s) { isSkeletal = s; }
+	bool GetSkeletal() { return isSkeletal; }
+
 	void AddChild(SceneNode* s);
 
 	virtual void Update(float msec);
@@ -52,6 +55,8 @@ protected:
 	Shader* shader;
 
 	GLuint tex;
+
+	bool isSkeletal;
 
 	Matrix4 modelMatrix;
 	Matrix4 worldTransform;

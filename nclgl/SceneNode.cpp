@@ -11,6 +11,7 @@ SceneNode::SceneNode()
 	colour = Vector4(1, 1, 1, 1);
 	boundingRadius = 1.0f;
 	distanceFromCamera = 0.0f;
+	isSkeletal = false;
 }
 
 SceneNode::SceneNode(Mesh * m, Shader * s, GLuint t)
@@ -22,6 +23,7 @@ SceneNode::SceneNode(Mesh * m, Shader * s, GLuint t)
 	colour = Vector4(1, 1, 1, 1);
 	boundingRadius = 1.0f;
 	distanceFromCamera = 0.0f;
+	isSkeletal = false;
 }
 
 SceneNode::SceneNode(Mesh * m, Shader * s, Vector4 c)
@@ -33,6 +35,7 @@ SceneNode::SceneNode(Mesh * m, Shader * s, Vector4 c)
 	colour = c;
 	boundingRadius = 1.0f;
 	distanceFromCamera = 0.0f;
+	isSkeletal = false;
 }
 
 

@@ -28,6 +28,7 @@ happens when we hit a debug breakpoint.
 void	MD5Node::Update(float msec) {
 	if(currentAnim) {
 		frameTime -= msec;
+		
 		//Time to calculate which frame we're now on!
 		while(frameTime < 0) {
 			frameTime += 1000.0f / currentAnim->GetFrameRate();
@@ -37,7 +38,7 @@ void	MD5Node::Update(float msec) {
 			currentAnimFrame = currentAnimFrame++%(currentAnim->GetNumFrames());
 
 			if(currentAnimFrame <= lastFrame)
-				SetModelMatrix(GetModelMatrix() * Matrix4::Translation(-GetSkeleton()->joints[0].position));
+				SetModelMatrix(GetModelMatrix() * Matrix4::Translation((-GetSkeleton()->joints[0].position * GetScale())));
 		}
 		//Transform this particular node's skeleton to the right frame of
 		//anim

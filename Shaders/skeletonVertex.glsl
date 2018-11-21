@@ -3,6 +3,9 @@
 uniform mat4 modelMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 projMatrix;
+uniform mat4 textureMatrix = mat4(1);
+uniform mat4 shadowMatrix;
+uniform vec4 nodeColour;
 
 uniform samplerBuffer weightTex;
 uniform samplerBuffer transformTex;
@@ -11,8 +14,9 @@ in  vec3 position;
 in 	vec3 normal;
 in 	vec3 tangent;
 in  vec2 texCoord;
+in 	vec4 colour;
 
-layout(location = 8) in vec2 weighting;
+layout(location = 6) in vec2 weighting;
 
 //			target->weights[j].x = subMesh.verts[j].weightElements;
 //			target->weights[j].y = subMesh.verts[j].weightIndex;
@@ -22,7 +26,9 @@ out Vertex	{
 	vec2 	texCoord;
 	vec3 	normal;
 	vec3 	tangent;
+	vec3	binormal;
 	vec3 	worldPos;
+	vec4	shadowProj;
 } OUT;
 
 //struct MD5Weight {
@@ -64,15 +70,19 @@ void main(void)	{
 		oNormal  += (mat3(invBindPose) * mat3(jointTransform) * normal)  * firstHalf.z;
 		oTangent += (mat3(invBindPose) * mat3(jointTransform) * tangent) * firstHalf.z;
 	}
-	mat3 normalMatrix = transpose(mat3(modelMatrix));
+	mat3 normalMatrix = transpose(inverse(mat3(modelMatrix)));
 	
 	vertPos.w = 1.0f;
 	
 	OUT.worldPos 	= (modelMatrix * vec4(vertPos.xyz, 1.0)).xyz;
 	OUT.texCoord 	= texCoord;
+	OUT.colour		= nodeColour;
 	
 	OUT.normal 		= normalMatrix * normalize(oNormal);
 	OUT.tangent 	= normalMatrix * normalize(oTangent);
+	OUT.binormal = normalize(normalMatrix * normalize(cross(oNormal, oTangent)));
+
+	OUT.shadowProj = (shadowMatrix * vec4(vertPos.xyz +(oNormal*1.5), 1));
 
 	gl_Position		= (projMatrix * viewMatrix * modelMatrix) * vec4(vertPos.xyz, 1.0);
 }

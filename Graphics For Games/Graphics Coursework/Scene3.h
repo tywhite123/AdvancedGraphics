@@ -18,7 +18,7 @@ public:
 
 protected:
 	Shader* sceneShader;
-	Shader* shadowShader;
+	Shader* hellKnightSceneShader;
 
 	GLuint shadowTex;
 	GLuint shadowFBO;

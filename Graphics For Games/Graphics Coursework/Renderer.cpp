@@ -48,9 +48,12 @@ Renderer::Renderer(Window & parent) : OGLRenderer(parent)
 	particleShader = new Shader(SHADERDIR"particleVertex.glsl", SHADERDIR"colourFragment.glsl"/*, SHADERDIR"pointGeom.glsl"*/);
 	lightShader = new Shader(SHADERDIR"matrixVertex.glsl", SHADERDIR"colourFragment.glsl");
 	pointShader = new Shader(SHADERDIR"TexturedVertex.glsl", SHADERDIR"TexturedFragment.glsl", SHADERDIR"pointGeom.glsl");
+	screenShader = new Shader(SHADERDIR"TexturedVertex.glsl", SHADERDIR"ScreenFrag.glsl");
+	processShader = new Shader(SHADERDIR"TexturedVertex.glsl", SHADERDIR"processfrag.glsl");
 
 	if (!terrainShader->LinkProgram() || !waterShader->LinkProgram() || !spyroShader->LinkProgram() || !fontShader->LinkProgram() || 
-		!skyboxShader->LinkProgram() || !particleShader->LinkProgram() || !lightShader->LinkProgram() || !pointShader->LinkProgram()) {
+		!skyboxShader->LinkProgram() || !particleShader->LinkProgram() || !lightShader->LinkProgram() || !pointShader->LinkProgram()
+		|| !screenShader->LinkProgram() || !processShader->LinkProgram()) {
 		return;
 	}
 	cubeMap[0] = SOIL_load_OGL_cubemap(TEXTUREDIR"rusted_west.jpg", TEXTUREDIR"rusted_east.jpg",
@@ -79,7 +82,7 @@ Renderer::Renderer(Window & parent) : OGLRenderer(parent)
 	SetTextureRepeating(scene1->GetHeightBumpMap(), true);
 	SetTextureRepeating(scene1->GetWaterTex(), true);
 
-	//light = new Light(Vector3((RAW_WIDTH*HEIGHTMAP_X / 2.0f)*10, 5000.0f*10, (RAW_HEIGHT*HEIGHTMAP_Z) / 2.0f*10), Vector4(1, 1, 1, 1.0f), (RAW_WIDTH*HEIGHTMAP_X) / 2.0f * 60.0f, SPOT);
+	//light = new Light(Vector3((RAW_WIDTH*HEIGHTMAP_X / 2.0f)*10, 5000.0f*10, (RAW_HEIGHT*HEIGHTMAP_Z) / 2.0f*10), Vector4(1, 1, 1, 1.0f), (RAW_WIDTH*HEIGHTMAP_X) / 2.0f * 60.0f,DIRECTIONAL);
 	light = new Light(Vector3(100.0f, 1000.0f, 100.0f), Vector4(1, 1, 1, 1), 5500.0f, SPOT);
 
 	SceneNode* lightNode = new SceneNode(lightMesh, lightShader, Vector4(0.992f, 0.721f, 0.074f, 1.0f));
@@ -120,6 +123,8 @@ Renderer::Renderer(Window & parent) : OGLRenderer(parent)
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 
 	SetupShadows();
+	SetupScreen();
+	SetupPostProcess();
 
 	time = 0;
 
@@ -136,6 +141,8 @@ Renderer::Renderer(Window & parent) : OGLRenderer(parent)
 	switching = false;
 	shadows = false;
 	drawingShadows = false;
+	post = false;
+	pType = BLUR;
 }
 
 Renderer::~Renderer()
@@ -222,7 +229,18 @@ void Renderer::UpdateScene(float msec)
 	else if (w->GetKeyboard()->KeyTriggered(KEYBOARD_PAUSE)) {
 		switching = !switching;
 	}
-
+	else if (w->GetKeyboard()->KeyTriggered(KEYBOARD_P))
+		post = !post;
+	else if (w->GetKeyboard()->KeyTriggered(KEYBOARD_NUMPAD1))
+		pType = BLUR;
+	else if (w->GetKeyboard()->KeyTriggered(KEYBOARD_NUMPAD2))
+		pType = SOBEL;
+	else if (w->GetKeyboard()->KeyTriggered(KEYBOARD_NUMPAD3))
+		pType = BLOOM;
+	else if (w->GetKeyboard()->KeyTriggered(KEYBOARD_NUMPAD4))
+		pType = INVERT;
+	else if (w->GetKeyboard()->KeyTriggered(KEYBOARD_NUMPAD5))
+		pType = GRAYSCALE;
 
 	if (switching && timeSinceSwitch >= 1000) {
 		scene++;
@@ -253,11 +271,15 @@ void Renderer::RenderScene()
 	}
 	SortNodeLists();
 
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	//Draw the scene
 	DrawScene();
 
 	//If PostProcess Do DrawPostProcessEfffect 
+	if(post)
+		DrawPostProcess();
 	//Then Present The Scene
+	PresentScene();
 
 	//Maybe Add deffered
 
@@ -346,6 +368,7 @@ void Renderer::DrawNode(SceneNode * n)
 		glUniformMatrix4fv(glGetUniformLocation(program, "modelMatrix"), 1, false, (float*)&transform);
 		glUniformMatrix4fv(glGetUniformLocation(program, "shadowMatrix"), 1, false, (float*)&shadowM);
 		glUniform1f(glGetUniformLocation(program, "time"), time);
+		glUniform1i(glGetUniformLocation(program, "skeletal"), (int)n->GetSkeletal());
 		glUniform1f(glGetUniformLocation(program, "particleSize"), n->GetScale().x*100);
 		glUniform3fv(glGetUniformLocation(program, "cameraPos"), 1, (float*)&camera->GetPosition());
 		glUniform4fv(glGetUniformLocation(program, "nodeColour"), 1, (float*)&n->GetColour());
@@ -380,14 +403,16 @@ void Renderer::DrawSkybox()
 
 void Renderer::DrawScene()
 {
-	
-	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-	DrawSkybox();
 	if (shadows) {
 		DrawShadows();
 		viewMatrix = camera->BuildViewMatrix();
 		glClear(GL_DEPTH_BUFFER_BIT);
+		//DrawSkybox();
 	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, sceneFBO);
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	DrawSkybox();
 
 
 	DrawNodes();
@@ -397,7 +422,7 @@ void Renderer::DrawScene()
 		DrawParticleSystem();
 	}
 	partEnd = (w->GetTimer()->GetMS() - start) + testEnd;
-
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void Renderer::DrawParticleSystem()
@@ -447,6 +472,91 @@ void Renderer::DrawShadows()
 
 void Renderer::DrawPostProcess()
 {
+	PostType currentType = pType;
+	glBindFramebuffer(GL_FRAMEBUFFER, processFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, sceneColourTex[2], 0);
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+
+	//SetShader
+	SetCurrentShader(processShader);
+
+	projMatrix = Matrix4::Orthographic(-1, 1, 1, -1, -1, 1);
+	viewMatrix.ToIdentity();
+	modelMatrix.ToIdentity();
+	UpdateShaderMatrices();
+
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_CULL_FACE);
+
+	if (pType == BLOOM) {
+		glUniform2f(glGetUniformLocation(currentShader->GetProgram(), "pixelSize"), 1.0f / width, 1.0f / height);
+		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "effectType"), BLOOM);
+		quad->SetTexture(sceneColourTex[0]);
+		quad->Draw();
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, sceneColourTex[2], 0);
+		pType = BLUR;
+	}
+
+	if (pType == SOBEL) {
+		glUniform2f(glGetUniformLocation(currentShader->GetProgram(), "pixelSize"), 1.0f / width, 1.0f / height);
+		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "effectType"), SOBEL);
+		quad->SetTexture(sceneColourTex[0]);
+		quad->Draw();
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, sceneColourTex[1], 0);
+		quad->SetTexture(sceneColourTex[1]);
+		quad->Draw();
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, sceneColourTex[0], 0);
+		//pType = BLUR;
+	}
+
+	if (pType == BLUR) {
+		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "effectType"), BLUR);
+		for (int i = 0; i < POST_PASSES; ++i) {
+
+			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "isVertical"), 0);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, sceneColourTex[1], 0);
+			if(currentType == pType)
+				quad->SetTexture(sceneColourTex[0]);
+			else
+				quad->SetTexture(sceneColourTex[2]);
+			quad->Draw();
+
+			glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "isVertical"), 1);
+			
+			if (currentType == pType)
+				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, sceneColourTex[0], 0);
+			else
+				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, sceneColourTex[2], 0);
+
+			quad->SetTexture(sceneColourTex[1]);
+			quad->Draw();
+
+
+		}
+	}
+
+	if (pType == INVERT) {
+		glUniform2f(glGetUniformLocation(currentShader->GetProgram(), "pixelSize"), 1.0f / width, 1.0f / height);
+		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "effectType"), INVERT);
+		quad->SetTexture(sceneColourTex[0]);
+		quad->Draw();
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, sceneColourTex[0], 0);
+	}
+	if (pType == GRAYSCALE) {
+		glUniform2f(glGetUniformLocation(currentShader->GetProgram(), "pixelSize"), 1.0f / width, 1.0f / height);
+		glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "effectType"), GRAYSCALE);
+		quad->SetTexture(sceneColourTex[0]);
+		quad->Draw();
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, sceneColourTex[0], 0);
+	}
+
+
+
+	glUseProgram(0);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	pType = currentType;
+
 }
 
 void Renderer::PresentScene()
@@ -455,16 +565,29 @@ void Renderer::PresentScene()
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-
-	//TODO: Set Shader HERE
-
+	SetCurrentShader(screenShader);
+	
 	projMatrix = Matrix4::Orthographic(-1, 1, 1, -1, -1, 1);
-
 	viewMatrix.ToIdentity();
-
+	modelMatrix.ToIdentity();
 	UpdateShaderMatrices();
 
+	quad->SetBumpMap(0);
+	Vector4 colour = Vector4(1, 1, 1, 1);
+	glUniform4fv(glGetUniformLocation(currentShader->GetProgram(), "nodeColour"), 1, (float*)&colour);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "diffuseTex"), 0);
+	glUniform1i(glGetUniformLocation(currentShader->GetProgram(), "bloomTex"), 1);
 	//SetActiveTextures or Set quad texture
+	quad->SetTexture(sceneColourTex[0]);
+	if (post && pType != BLUR) {
+		if (pType == SOBEL)
+			quad->SetBumpMap(sceneColourTex[2]);
+		else if (pType == GRAYSCALE || pType == INVERT)
+			quad->SetTexture(sceneColourTex[2]);
+		else
+			quad->SetBumpMap(sceneColourTex[1]);
+	}
+		
 
 	quad->Draw();
 	
@@ -516,6 +639,46 @@ void Renderer::SetupShadows()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+void Renderer::SetupScreen()
+{
+	GenerateScreenTextures(sceneDepthTex, true);
+	GenerateScreenTextures(sceneColourTex[0], false);
+	GenerateScreenTextures(sceneColourTex[1], false);
+	GenerateScreenTextures(sceneColourTex[2], false);
+
+	//Gen FBO
+	glGenFramebuffers(1, &sceneFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, sceneFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, sceneDepthTex, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, sceneColourTex[0], 0);
+	//glDrawBuffer(GL_NONE);
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE || !sceneDepthTex || !sceneColourTex[0])
+		return;
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+}
+
+void Renderer::SetupPostProcess()
+{
+	glGenFramebuffers(1, &processFBO);
+}
+
+void Renderer::SetupDeferred()
+{
+	glGenFramebuffers(1, &deferredFBO);
+	glGenFramebuffers(1, &lightFBO);
+
+	GLenum buffers[2];
+	buffers[0] = GL_COLOR_ATTACHMENT0;
+	buffers[1] = GL_COLOR_ATTACHMENT1;
+
+	//GEN SCREEN TEX
+
+	glBindFramebuffer(GL_FRAMEBUFFER, deferredFBO);
+	
+	//FRAME BUFFER TEX
+}
+
 void Renderer::GenerateScreenTextures(GLuint & into, bool depth)
 {
 	glGenTextures(1, &into);
@@ -529,6 +692,18 @@ void Renderer::GenerateScreenTextures(GLuint & into, bool depth)
 	glTexImage2D(GL_TEXTURE_2D, 0, depth ? GL_DEPTH_COMPONENT24 : GL_RGBA8, width, height, 0, depth ? GL_DEPTH_COMPONENT : GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void Renderer::FillBuffers()
+{
+}
+
+void Renderer::DrawLights()
+{
+}
+
+void Renderer::CombineBuffers()
+{
 }
 
 

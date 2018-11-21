@@ -15,6 +15,11 @@
 
 
 #define SHADOWSIZE 2048
+#define POST_PASSES 10
+
+enum PostType {
+	BLUR = 0, SOBEL = 1, BLOOM = 2, INVERT = 3, GRAYSCALE = 4, STATIC = 5
+};
 
 class Renderer : public OGLRenderer
 {
@@ -46,8 +51,16 @@ protected:
 
 	//FBO SETUPS
 	void SetupShadows();
+	void SetupScreen();
+	void SetupPostProcess();
+	void SetupDeferred();
 	//ADD IN GEN SCREEN TEX FROM DEFERRED
 	void GenerateScreenTextures(GLuint & into, bool depth);
+
+	//DEFFERED STUFF?
+	void FillBuffers();
+	void DrawLights();
+	void CombineBuffers();
 
 	//VARIABLES
 	SceneNode* root;
@@ -66,6 +79,8 @@ protected:
 	Shader* spyroShader;
 	Shader* skyboxShader;
 	Shader* particleShader;
+	Shader* screenShader;
+	Shader* processShader;
 
 	Frustum frameFrustum;
 
@@ -111,6 +126,14 @@ protected:
 	Shader* pointShader;
 
 	GLuint sceneFBO;
-	GLuint sceneTex;
+	GLuint sceneColourTex[3];
+	GLuint sceneDepthTex;
+
+	bool post;
+	PostType pType;
+	GLuint processFBO;
+
+	GLuint deferredFBO;
+	GLuint lightFBO;
 };
 

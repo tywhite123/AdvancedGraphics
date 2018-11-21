@@ -6,7 +6,7 @@
 Renderer9::Renderer9(Window & parent) : OGLRenderer(parent)
 {
 	camera = new Camera(0, 90.0f, Vector3(-180, 60, 0));
-	currentShader = new Shader(SHADERDIR"TexturedVertex.glsl", SHADERDIR"TexturedFragment.glsl");
+	currentShader = new Shader(SHADERDIR"skeletonVertexSimple.glsl", SHADERDIR"TexturedFragment.glsl");
 
 	hellData = new MD5FileData(MESHDIR"hellknight.md5mesh");
 	hellNode = new MD5Node(*hellData);
