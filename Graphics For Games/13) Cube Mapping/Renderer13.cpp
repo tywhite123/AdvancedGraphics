@@ -94,7 +94,7 @@ void Renderer13::DrawHeightmap()
 
 	UpdateShaderMatrices();
 
-	//heightMap->Draw();
+	heightMap->Draw();
 
 	glUseProgram(0);
 

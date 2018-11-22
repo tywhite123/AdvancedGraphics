@@ -6,7 +6,7 @@
 
 int main() {	
 	srand(time(NULL));
-	Window w("Graphics Coursework", 800, 600, false);
+	Window w("Graphics Coursework", 1920, 1200, true);
 	if(!w.HasInitialised()) {
 		return -1;
 	}

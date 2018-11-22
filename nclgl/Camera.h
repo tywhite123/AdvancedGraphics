@@ -22,21 +22,26 @@ public:
 	Camera(void){
 		yaw		= 0.0f;
 		pitch	= 0.0f;
+		panning = false;
 	};
 
 	Camera(float pitch, float yaw, Vector3 position){
 		this->pitch		= pitch;
 		this->yaw		= yaw;
 		this->position	= position;
+		panning = false;
 	}
 
 	~Camera(void){};
 
-	void UpdateCamera(float msec = 10.0f);
+	void UpdateCamera(float msec = 10.0f, bool panning = false);
 
 	//Builds a view matrix for the current camera variables, suitable for sending straight
 	//to a vertex shader (i.e it's already an 'inverse camera matrix').
 	Matrix4 BuildViewMatrix();
+
+	Vector3 GetPanningDir() { return panningDir; };
+	void SetPanningDir(Vector3 dir) { panningDir = dir; }
 
 	//Gets position in world space
 	Vector3 GetPosition() const { return position;}
@@ -53,8 +58,17 @@ public:
 	//Sets pitch, in degrees
 	void	SetPitch(float p) {pitch = p;}
 
+	void SetCamera(float pitch, float yaw, Vector3 position) {
+		this->pitch = pitch;
+		this->yaw = yaw;
+		this->position = position;
+	}
+
 protected:
 	float	yaw;
 	float	pitch;
 	Vector3 position;
+
+	bool panning;
+	Vector3 panningDir;
 };

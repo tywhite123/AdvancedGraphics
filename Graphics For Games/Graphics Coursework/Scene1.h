@@ -14,25 +14,16 @@ public:
 	GLuint GetHeightMapTex() { return hmap->GetTexture(); }
 	GLuint GetHeightBumpMap() { return hmap->GetBumpMap(); }
 	GLuint GetWaterTex() { return water->GetTexture(); }
-	GLuint GetCubeMap() { return cubeMap; }
 
 
 protected:
-	SceneNode* root;
-	Camera* camera;
-	HeightMap* heightMap;
 	HeightMapFromJPG* hmap;
 	HeightMap* water;
 	Mesh* spyro;
-	Mesh* quad;
-	Light* light;
 
 	Shader* terrainShader;
 	Shader* waterShader;
 	Shader* spyroShader;
-	Shader* skyboxShader;
-	Shader* particleShader;
 
-	GLuint cubeMap;
 };
 

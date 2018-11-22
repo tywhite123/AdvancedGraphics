@@ -20,13 +20,9 @@ protected:
 	Shader* sceneShader;
 	Shader* hellKnightSceneShader;
 
-	GLuint shadowTex;
-	GLuint shadowFBO;
-
 	MD5FileData* hellData;
 	MD5Node* hellNode;
 	Mesh* floor;
 	Mesh* spyro;
-	Light* light;
 };
 

@@ -46,14 +46,14 @@ void main(void){
 
     if(IN.shadowProj.w > 0.0){
         shadow = textureProj(shadowTex, IN.shadowProj);
-        // vec3 projCoord = IN.shadowProj.xyz / IN.shadowProj.w;
-        // projCoord = projCoord * 0.5 + 0.5;
-        // float currentDepth = projCoord.z;
-        // float closestDepth = texture(shadowTex, projCoord.xy).r;
-        // float bias = max(0.05 * (1.0 - dot(normal, lightPos)), 0.005);
-        // if(currentDepth - bias > closestDepth){
-        //     shadow = 0.1;
-        // }
+        //vec3 projCoord = IN.shadowProj.xyz / IN.shadowProj.w;
+        //projCoord = projCoord * 0.5 + 0.5;
+        //float currentDepth = projCoord.z;
+        //float closestDepth = texture(shadowTex, projCoord.xy).r;
+        //float bias = max(0.05 * (1.0 - dot(normal, lightPos)), 0.005);
+        //if(currentDepth - bias > closestDepth){
+        //    shadow = 0.1;
+        //}
     }
 
     lambert *= shadow;

@@ -16,6 +16,7 @@
 
 #define SHADOWSIZE 2048
 #define POST_PASSES 10
+#define LIGHTNUM	8
 
 enum PostType {
 	BLUR = 0, SOBEL = 1, BLOOM = 2, INVERT = 3, GRAYSCALE = 4, STATIC = 5
@@ -47,6 +48,9 @@ protected:
 	void DrawPostProcess();
 	void PresentScene();
 	void DrawUI();
+	void DrawSplitScreen();
+
+	void ResetCameras();
 	float partEnd;
 
 	//FBO SETUPS
@@ -54,6 +58,7 @@ protected:
 	void SetupScreen();
 	void SetupPostProcess();
 	void SetupDeferred();
+	void SetupSplitScreen();
 	//ADD IN GEN SCREEN TEX FROM DEFERRED
 	void GenerateScreenTextures(GLuint & into, bool depth);
 
@@ -61,6 +66,7 @@ protected:
 	void FillBuffers();
 	void DrawLights();
 	void CombineBuffers();
+	void SetupPointLights();
 
 	//VARIABLES
 	SceneNode* root;
@@ -68,15 +74,12 @@ protected:
 	SceneNode* root3;
 	ParticleBehaviour* particles;
 	Camera* camera;
-	HeightMap* heightMap;
-	HeightMap* water;
-	Mesh* spyro;
+	Camera* camera2;
+	Camera* camera3;
 	Mesh* quad;
 	Light* light;
+	Light* light3;
 
-	Shader* terrainShader;
-	Shader* waterShader;
-	Shader* spyroShader;
 	Shader* skyboxShader;
 	Shader* particleShader;
 	Shader* screenShader;
@@ -95,7 +98,7 @@ protected:
 	Font* basicFont;
 	Shader* fontShader;
 	
-
+	float snowVal;
 	float start;
 	float end;
 	float testEnd;
@@ -106,10 +109,13 @@ protected:
 	Window* w;
 	string fps;
 	string rTime;
+	float waterRotate;
+	float waterTime;
 
 	int scene;
 	bool rain;
 	bool profiler;
+	bool splitScreen;
 	
 	Scene1* scene1;
 	Scene2* scene2;
@@ -133,7 +139,13 @@ protected:
 	PostType pType;
 	GLuint processFBO;
 
-	GLuint deferredFBO;
-	GLuint lightFBO;
+	Shader* splitScreenShader;
+
+
+	GLuint splitScreenFBO[3];
+	GLuint splitColourTex[3];
+	GLuint splitDepthTex[3];
+
+
 };
 

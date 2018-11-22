@@ -11,7 +11,6 @@ Scene1::Scene1()
 	OBJMesh* m = new OBJMesh();
 	m->LoadOBJMesh(MESHDIR"spyro2\\spyro.obj");
 	spyro = m;
-	quad = Mesh::GenerateQuad();
 	/*particles = new ParticleBehaviour(1000, Vector3(0, 0, 0), Vector4(1, 1, 1, 1), Vector3(0, 0, 0), 500.0f);*/
 
 
@@ -26,23 +25,17 @@ Scene1::Scene1()
 	waterShader = new Shader(SHADERDIR"WaterVertex.glsl", SHADERDIR"WaterFragment.glsl");
 	spyroShader = new Shader(SHADERDIR"PerPixelVertex.glsl", SHADERDIR"PerPixelFragment.glsl");
 	//fontShader = new Shader(SHADERDIR"FontVert.glsl", SHADERDIR"FontFrag.glsl");
-	skyboxShader = new Shader(SHADERDIR"SkyboxVertex.glsl", SHADERDIR"SkyboxFragment.glsl");
 //	particleShader = new Shader(SHADERDIR"particleVertex.glsl", SHADERDIR"colourFragment.glsl");
 
-	if (!terrainShader->LinkProgram() || !waterShader->LinkProgram() || !spyroShader->LinkProgram() || /*!fontShader->LinkProgram() ||*/
-		!skyboxShader->LinkProgram() /*|| !particleShader->LinkProgram()*/) {
+	if (!terrainShader->LinkProgram() || !waterShader->LinkProgram() || !spyroShader->LinkProgram()) {
 		return;
 	}
 
 	hmap->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"Barren Reds.JPG", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
 	hmap->SetBumpMap(SOIL_load_OGL_texture(TEXTUREDIR"Barren RedsDOT3.JPG", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
 	water->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"water.TGA"/*"Barren Reds.JPG"*/, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
-	cubeMap = SOIL_load_OGL_cubemap(TEXTUREDIR"rusted_west.jpg", TEXTUREDIR"rusted_east.jpg",
-		TEXTUREDIR"rusted_up.jpg", TEXTUREDIR"rusted_down.jpg", TEXTUREDIR"rusted_south.jpg",
-		TEXTUREDIR"rusted_north.jpg", SOIL_LOAD_RGB, SOIL_CREATE_NEW_ID, 0);
 
-
-	if (!hmap->GetTexture() || !water->GetTexture() || !hmap->GetBumpMap()|| !cubeMap)
+	if (!hmap->GetTexture() || !water->GetTexture() || !hmap->GetBumpMap())
 		return;
 
 	//SET TEXTURE REPEATING
@@ -77,4 +70,10 @@ Scene1::Scene1()
 
 Scene1::~Scene1()
 {
+	delete hmap;
+	delete water;
+	delete spyro;
+	delete terrainShader;
+	delete waterShader;
+	delete spyroShader;
 }

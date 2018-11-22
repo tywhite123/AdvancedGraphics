@@ -9,6 +9,7 @@ uniform vec3 lightPos;
 uniform float lightRadius;
 uniform int lightType;
 uniform float time;
+uniform float snow;
 
 in Vertex{
     vec4 colour;
@@ -27,10 +28,12 @@ void main(void){
     float grad = dot(normalize(IN.normal), vec3(0,1,0))-0.5;
 
     float mixVal = clamp(grad, 0.0, 1.0);
+    float snowMix = clamp(snow, 0.0, 1.0);
 
     //vec4 diffuse = texture(diffuseTex, IN.texCoord);
    
-    vec4 diffuse = mix(texture(diffuseTex, IN.texCoord), texture(grassTex, IN.texCoord), mixVal);
+    vec4 snowGrass = mix(texture(grassTex, IN.texCoord), vec4(1,1,1,1), snowMix);
+    vec4 diffuse = mix(texture(diffuseTex, IN.texCoord), snowGrass, mixVal);
     //vec4 diffuse = mix(texture(diffuseTex, IN.texCoord), vec4(1,1,1,1), mixVal); 
     mat3 TBN = mat3(IN.tangent, IN.binormal, IN.normal);
 

@@ -82,7 +82,7 @@ void main(void)	{
 	OUT.tangent 	= normalMatrix * normalize(oTangent);
 	OUT.binormal = normalize(normalMatrix * normalize(cross(oNormal, oTangent)));
 
-	OUT.shadowProj = (shadowMatrix * vec4(vertPos.xyz +(oNormal*1.5), 1));
+	OUT.shadowProj = (shadowMatrix * vec4(vertPos.xyz +(oNormal*10), 1));
 
 	gl_Position		= (projMatrix * viewMatrix * modelMatrix) * vec4(vertPos.xyz, 1.0);
 }

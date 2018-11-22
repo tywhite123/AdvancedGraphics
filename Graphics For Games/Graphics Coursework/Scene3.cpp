@@ -6,26 +6,16 @@
 Scene3::Scene3()
 {
 
-	//hellData = new MD5FileData(MESHDIR"hellknight.md5mesh");
-	//hellNode = new MD5Node(*hellData);
-
-	//hellData->AddAnim(MESHDIR"idle2.md5anim");
-	//hellNode->PlayAnim(MESHDIR"idle2.md5anim");
-
 	OBJMesh* obj = new OBJMesh();
 	obj->LoadOBJMesh(MESHDIR"spyro2\\spyro.obj");
 	spyro = obj;
 
 	sceneShader = new Shader(SHADERDIR"ShadowSceneVertex.glsl", SHADERDIR"ShadowSceneFrag.glsl");
 	hellKnightSceneShader = new Shader(SHADERDIR"skeletonVertex.glsl", SHADERDIR"ShadowSceneFrag.glsl");
-	
-	//sceneShader = new Shader(SHADERDIR"PerPixelVertex.glsl", SHADERDIR"PerPixelFragment.glsl");
-	//shadowShader = new Shader(SHADERDIR"ShadowVertex.glsl", SHADERDIR"ShadowFrag.glsl");
 
-	if (!sceneShader->LinkProgram() || !hellKnightSceneShader->LinkProgram()/* || !shadowShader->LinkProgram()*/)
+	if (!sceneShader->LinkProgram() || !hellKnightSceneShader->LinkProgram())
 		return;
 
-	//SetUpFBOs();
 
 	floor = Mesh::GenerateQuad();
 	floor->SetTexture(SOIL_load_OGL_texture(TEXTUREDIR"brick.tga", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS));
@@ -35,11 +25,10 @@ Scene3::Scene3()
 	floorNode->SetColour(Vector4(1, 1, 1, 1));
 	floorNode->SetScale(Vector3(1000, 1000, 1));
 	floorNode->SetModelMatrix(Matrix4::Translation(Vector3(0,0,0))*Matrix4::Rotation(90, Vector3(1, 0, 0)));
-	floorNode->SetBoundingRadius(10000.0f);
+	floorNode->SetBoundingRadius(1000000.0f);
 	AddChild(floorNode);
 
 	hellData = new MD5FileData(MESHDIR"hellknight.md5mesh");
-	//
 	hellData->AddAnim(MESHDIR"walk7.md5anim");
 	int x;
 	for (int i = 0; i < 25; ++i) {
@@ -49,24 +38,31 @@ Scene3::Scene3()
 		hellNode->PlayAnim(MESHDIR"walk7.md5anim");
 		hellNode->SetShader(hellKnightSceneShader);
 		hellNode->SetScale(Vector3(2, 2, 2));
-		if(i%200)
-		hellNode->SetModelMatrix(Matrix4::Translation(Vector3(x, 0, ((i%5)*200.0f))));
-		hellNode->SetBoundingRadius(1000.0f);
+		
+		hellNode->SetModelMatrix(Matrix4::Translation(Vector3(x+3000, 0, (((i%5)*200.0f)-400.0f))));
+		hellNode->SetBoundingRadius(1000000.0f);
 		hellNode->SetSkeletal(true);
 		AddChild(hellNode);
 	}
 
 	SceneNode* spyroNode = new SceneNode(spyro, sceneShader, Vector4(1, 1, 1, 1));
 	spyroNode->SetScale(Vector3(100, 100, 100));
-	spyroNode->SetModelMatrix(Matrix4::Translation(Vector3(0, 0, -300)));
-	spyroNode->SetBoundingRadius(1000.0f);
-	//AddChild(spyroNode);
+	spyroNode->SetModelMatrix(Matrix4::Translation(Vector3(-1000, 0, 0)) * Matrix4::Rotation(90, Vector3(0,1,0)));
+	spyroNode->SetBoundingRadius(1000000.0f);
+	AddChild(spyroNode);
 
 }
 
 
 Scene3::~Scene3()
 {
+	delete sceneShader;
+	delete hellKnightSceneShader;
+	
+	delete hellNode;
+	delete hellData;
+	delete floor;
+	delete spyro;
 }
 
 void Scene3::Update(float msec)
